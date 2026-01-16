@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lynx Organizational Structure</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .org-container {
+            padding: 2rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .org-node {
+            position: relative;
+            margin: 1rem 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .org-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .node-card {
+            background: transparent;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .node-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+            border-radius: 50%;
+        }
+
+        .head-office .node-logo {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+        }
+
+        .isb-network .node-logo {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .rwp-network .node-logo {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .branch-node .node-logo {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .isb-branch .node-logo {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .rwp-branch .node-logo {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .node-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .head-office .node-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .network-title {
+            font-size: 1.2rem;
+        }
+
+        .branch-title {
+            font-size: 1rem;
+        }
+
+        /* SVG Canvas for connecting lines */
+        #connectionCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+            .org-node {
+                margin: 0.5rem 0;
+            }
+            
+            .node-card {
+                padding: 1rem;
+            }
+            
+            .node-logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .head-office .node-logo {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            .head-office .node-title {
+                font-size: 1.2rem;
+            }
+            
+            .network-title {
+                font-size: 1.1rem;
+            }
+            
+            .branch-title {
+                font-size: 0.9rem;
+            }
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .section-spacing {
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 767px) {
+            .section-spacing {
+                margin: 2rem 0;
+            }
+        }
+
+        /* Logo image styling */
+        .node-logo img {
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .tree-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.connection-line {
+    stroke: white;
+    stroke-width: 3;
+    fill: none;
+    opacity: 0.8;
+}
+
+.connection-dot {
+    fill: white;
+    opacity: 0.9;
+}
+    </style>
+</head>
+<body>
+    <!-- SVG for connecting lines -->
+<svg class="tree-lines" id="tree-lines"></svg>
+
+   <div class="container-fluid org-container">
+    <h1 class="page-title">The Lynx Organizational Structure</h1>
+
+    <!-- Head Office -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+            <div class="org-node head-office" id="head-office">
+                <div class="card node-card">
+                    <div class="node-logo">
+                        <img src="./assets/img/img/5.png" alt="Head Office Logo">
+                    </div>
+                    <h2 class="node-title">The Lynx Head Office</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Networks and Branches Row -->
+    <div class="section-spacing">
+        <div class="row">
+            <!-- ISB Column -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <!-- ISB Network -->
+                <div class="org-node isb-network" id="isb-network">
+                    <div class="card node-card">
+                        <div class="node-logo">
+                            <img src="./assets/img/img/5.png" alt="ISB Network Logo">
+                        </div>
+                        <h3 class="node-title network-title">ISB Network</h3>
+                    </div>
+                </div>
+
+                <!-- ISB Branches -->
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="org-node branch-node isb-branch" id="isb-branch-1">
+                            <div class="card node-card">
+                                <div class="node-logo">
+                                    <img src="./assets/img/img/5.png" alt="ISB Branch 1 Logo">
+                                </div>
+                                <h4 class="node-title branch-title">ISB Branch 1</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="org-node branch-node isb-branch" id="isb-branch-2">
+                            <div class="card node-card">
+                                <div class="node-logo">
+                                    <img src="./assets/img/img/5.png" alt="ISB Branch 2 Logo">
+                                </div>
+                                <h4 class="node-title branch-title">ISB Branch 2</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="org-node branch-node isb-branch" id="isb-branch-3">
+                            <div class="card node-card">
+                                <div class="node-logo">
+                                    <img src="./assets/img/img/5.png" alt="ISB Branch 3 Logo">
+                                </div>
+                                <h4 class="node-title branch-title">ISB Branch 3</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RWP Column -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <!-- RWP Network -->
+                <div class="org-node rwp-network" id="rwp-network">
+                    <div class="card node-card">
+                        <div class="node-logo">
+                            <img src="./assets/img/img/5.png" alt="RWP Network Logo">
+                        </div>
+                        <h3 class="node-title network-title">RWP Network</h3>
+                    </div>
+                </div>
+
+                <!-- RWP Branches -->
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="org-node branch-node rwp-branch" id="rwp-branch-1">
+                            <div class="card node-card">
+                                <div class="node-logo">
+                                    <img src="./assets/img/img/5.png" alt="RWP Branch 1 Logo">
+                                </div>
+                                <h4 class="node-title branch-title">RWP Branch 1</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="org-node branch-node rwp-branch" id="rwp-branch-2">
+                            <div class="card node-card">
+                                <div class="node-logo">
+                                    <img src="./assets/img/img/5.png" alt="RWP Branch 2 Logo">
+                                </div>
+                                <h4 class="node-title branch-title">RWP Branch 2</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="org-node branch-node rwp-branch" id="rwp-branch-3">
+                            <div class="card node-card">
+                                <div class="node-logo">
+                                    <img src="./assets/img/img/5.png" alt="RWP Branch 3 Logo">
+                                </div>
+                                <h4 class="node-title branch-title">RWP Branch 3</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+class OrgChartConnector {
+    constructor() {
+        this.svg = document.getElementById('tree-lines');
+        this.connections = [
+            // Head Office to Networks
+            { from: 'head-office', to: 'isb-network', color: 'red' },
+            { from: 'head-office', to: 'rwp-network', color: 'red' },
+
+            // ISB Network to ISB Branches
+            { from: 'isb-network', to: 'isb-branch-1', color: 'red' },
+            { from: 'isb-network', to: 'isb-branch-2', color: 'red' },
+            { from: 'isb-network', to: 'isb-branch-3', color: 'red' },
+
+            // RWP Network to RWP Branches
+            { from: 'rwp-network', to: 'rwp-branch-1', color: 'red' },
+            { from: 'rwp-network', to: 'rwp-branch-2', color: 'red' },
+            { from: 'rwp-network', to: 'rwp-branch-3', color: 'red' }
+        ];
+        this.init();
+    }
+
+    init() {
+        this.drawConnections();
+        window.addEventListener('resize', this.debounce(() => this.drawConnections(), 250));
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => this.drawConnections(), 500);
+        });
+    }
+
+    debounce(func, wait) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(func, wait);
+        };
+    }
+
+    getElementCenter(id) {
+        const el = document.getElementById(id);
+        if (!el) return null;
+
+        const rect = el.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+        return {
+            x: rect.left + scrollLeft + rect.width / 2,
+            y: rect.top + scrollTop + rect.height
+        };
+    }
+
+    createConnection(fromId, toId, color) {
+        const from = this.getElementCenter(fromId);
+        const to = this.getElementCenter(toId);
+        if (!from || !to) return null;
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const controlX = (from.x + to.x) / 2;
+        const controlY = Math.min(from.y, to.y) - 60;
+
+        path.setAttribute("d", `M ${from.x} ${from.y} Q ${controlX} ${controlY} ${to.x} ${to.y}`);
+        path.setAttribute("stroke", color);
+        path.setAttribute("stroke-width", "3");
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke-opacity", "0.8");
+
+        return path;
+    }
+
+    updateSVGSize() {
+        const width = document.documentElement.scrollWidth;
+        const height = document.documentElement.scrollHeight;
+        this.svg.setAttribute("width", width);
+        this.svg.setAttribute("height", height);
+        this.svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    }
+
+    drawConnections() {
+        while (this.svg.firstChild) {
+            this.svg.removeChild(this.svg.firstChild);
+        }
+
+        this.updateSVGSize();
+
+        this.connections.forEach(({ from, to, color }) => {
+            const path = this.createConnection(from, to, color);
+            if (path) this.svg.appendChild(path);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const connector = new OrgChartConnector();
+
+    // Redraw when all images are loaded
+    const images = document.querySelectorAll('.node-logo img');
+    let loaded = 0;
+
+    const tryDraw = () => {
+        if (++loaded === images.length) {
+            connector.drawConnections();
+        }
+    };
+
+    images.forEach(img => {
+        if (img.complete) {
+            tryDraw();
+        } else {
+            img.addEventListener('load', tryDraw);
+            img.addEventListener('error', tryDraw); // In case of broken image
+        }
+    });
+});
+</script>
+
+
+</body>
+</html>

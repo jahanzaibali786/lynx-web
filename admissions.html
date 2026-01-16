@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>The Lynx School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Shelly - Website" />
+    <meta name="author" content="merkulove" />
+    <meta name="keywords" content="" />
+    <link rel="icon" href="assets/img/lnxlogo-removebg-preview-icon.png" />
+    <link rel="stylesheet" type="text/css" href="assets/css/animate.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="assets/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="assets/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <header
+        style="
+          position: fixed;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100%;
+          z-index: 9999999;
+          transition: all 0.4s;
+          height: 100px;
+        "
+      >
+        <div class="container" style="height: 100%">
+          <div class="row md-center">
+            <!-- <div " row "> -->
+            <div class="col-lg-4 col logo">
+              <a href="index.html" title="">
+                <!-- <img src="assets/img/logo.png" alt="" srcset="assets/img/01_Logo_2x.png 2x"> -->
+                <div
+                  class="lgocnt"
+                  style="height: 100px; /* width: 300px !important; */"
+                >
+                  <img
+                    src="assets/img/lnxlogo-removebg-preview.png"
+                    alt=" "
+                    style="
+                      height: 100%;
+                      /* width: 100%; */
+                      padding: 20px 0px 20px 20px;
+                    "
+                  />
+                </div>
+              </a>
+            </div>
+            <!--logo end-->
+
+            <!-- <ul class="contact-add d-flex flex-wrap"> -->
+
+            <div class="col-8 navigation-bar align-items-center text-center">
+              <nav>
+                <ul>
+                  <!-- <li><a class="active" href="index.html" title="">Home</a></li> -->
+                  <li><a href="about.html" title="">About</a></li>
+                  <li><a href="academics.html" title="">Academics</a></li>
+                  <li><a href="affiliations.html" title="">Affiliations</a></li>
+                  <li><a href="gallery.html" title="">Gallery</a></li>
+                  <li class="#">
+                    <a href="career.html" title="">Careers</a>
+                  </li>
+                  <li><a href="alumni.html" title="">Alumni</a></li>
+                  <li><a href="contacts.html" title="">Contact Us</a></li>
+                  <li class="#">
+                    <a href="admissions.html" title="" class="admissions"
+                      >Admissions</a
+                    >
+                  </li>
+                </ul>
+              </nav>
+              <!--nav end-->
+            </div>
+            <!--navigation-bar end-->
+
+            <div class="col-md-2 menu-btn">
+              <a href="#">
+                <span class="bar1"></span>
+                <span class="bar2"></span>
+                <span class="bar3"></span>
+              </a>
+            </div>
+          </div>
+
+          <!--menu-btn end-->
+        </div>
+      </header>
+
+      <div class="responsive-menu">
+        <ul>
+          <li><a href="index.html" title="">Home</a></li>
+          <li><a href="about.html" title="">About</a></li>
+          <li><a href="career.html" title="">Careers</a></li>
+          <li><a href="admissions.html" title="">Admissions </a></li>
+          <li><a href="affiliations.html" title="">Affiliations</a></li>
+          <li><a href="gallery.html" title="">Gallery</a></li>
+          <li><a href="academics.html" title="">Academics</a></li>
+          <li><a href="alumni.html" title="">Alumni</a></li>
+          <li><a href="contacts.html" title="">Contact Us</a></li>
+        </ul>
+      </div>
+      <!--responsive-menu end-->
+
+      <section class="pager-section classpic">
+        <div class="container">
+          <div class="pager-content text-center">
+            <h2>Admissions</h2>
+            <ul>
+              <li><a href="index.html" title="">Home</a></li>
+              <li><span>Admissions</span></li>
+            </ul>
+          </div>
+          <!--pager-content end-->
+          <!-- <h2 class="page-titlee">Shelly</h2> -->
+        </div>
+      </section>
+      <!--pager-section end-->
+      <!-- MultiStep Form -->
+      <section>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 col-md-offset-3">
+              <form id="msform">
+                <!-- progressbar -->
+                <ul id="progressbar">
+                  <li class="active">Parent / Guardian Details</li>
+                  <li>Student Details</li>
+                  <li>Class Details</li>
+                </ul>
+                <!-- fieldsets -->
+                <fieldset>
+                  <h2 class="fs-title">Admissions Details</h2>
+                  <h3 class="fs-subtitle">Tell us something about yourself</h3>
+                  <input
+                    type="text"
+                    name="first_name"
+                    placeholder="First Name"
+                  />
+                  <input type="text" name="last_name" placeholder="Last Name" />
+                  <input type="text" name="phone" placeholder="Phone" />
+                  <input type="text" name="address" placeholder="Address" />
+                  <input
+                    type="button"
+                    name="next"
+                    class="next action-button"
+                    value="Next"
+                  />
+                </fieldset>
+                <fieldset>
+                  <h2 class="fs-title">Student Details</h2>
+                  <h3 class="fs-subtitle">
+                    Enter the child's personal details to help us understand
+                    their needs and placement.
+                  </h3>
+                  <input
+                    type="text"
+                    name="child_name"
+                    placeholder="Child Name"
+                  />
+                  <!-- <input type="date" id="dob" name="dob" placeholder="Date of Birth" required> -->
+                  <div
+                    class="d-flex flex-wrap"
+                    style="gap: 0.6rem; margin-bottom: 10px"
+                  >
+                    <span class="d-flex">Gender:</span>
+                    <span class="d-flex"
+                      ><input
+                        type="radio"
+                        name="gender"
+                        value="male"
+                        id=""
+                        style="margin-bottom: 0; margin-right: 0.23rem"
+                      />
+                      Male</span
+                    >
+                    <span class="d-flex"
+                      ><input
+                        type="radio"
+                        name="gender"
+                        value="female"
+                        id=""
+                        style="margin-bottom: 0; margin-right: 0.23rem"
+                      />
+                      Female</span
+                    >
+                  </div>
+                  <textarea
+                    name="more_about_child"
+                    id=""
+                    placeholder="More about your child"
+                  ></textarea>
+                  <input
+                    type="button"
+                    name="previous"
+                    class="previous action-button-previous"
+                    value="Previous"
+                  />
+                  <input
+                    type="button"
+                    name="next"
+                    class="next action-button"
+                    value="Next"
+                  />
+                </fieldset>
+                <fieldset>
+                  <h2 class="fs-title">Class & Admission Details</h2>
+                  <h3 class="fs-subtitle">
+                    Choose the appropriate level for your child:
+                  </h3>
+                  <div class="d-flex">
+                    <select name="branch" id="">
+                      <option value="">-- Select Branch --</option>
+                      <option>The Lynx Daycare Islamabad</option>
+                      <option>The Lynx Nursery Islamabad</option>
+                      <option value="Other">
+                        The Lynx Primary Branch Islamabad
+                      </option>
+                      <option value="Other">The Lynx Daycare Rawalpindi</option>
+                      <option value="Other">The Lynx Nursery Rawalpindi</option>
+                      <option value="Other">
+                        The Lynx Secondary Branch Rawalpindi
+                      </option>
+                    </select>
+                  </div>
+                  <div class="d-flex">
+                    <select name="class" id="">
+                      <option value="">-- Select Class --</option>
+                      <option>Early Years</option>
+                      <option>Juniors</option>
+                      <option value="Other">Primary</option>
+                      <option value="Other">Elementory</option>
+                      <option value="Other">Senior</option>
+                    </select>
+                  </div>
+
+                  <!-- <input type="text" name="email" placeholder="Email" />
+								<input type="password" name="pass" placeholder="Password" />
+								<input type="password" name="cpass" placeholder="Confirm Password" /> -->
+                  <input
+                    type="button"
+                    name="previous"
+                    class="previous action-button-previous"
+                    value="Previous"
+                  />
+                  <input
+                    type="submit"
+                    name="submit"
+                    class="submit action-button"
+                    value="Submit"
+                  />
+                </fieldset>
+              </form>
+              <!-- link to designify.me code snippets -->
+              <!-- <div class="dme_link">
+								<p><a href="http://designify.me/code-snippets-js/" target="_blank">More Code Snippets</a></p>
+							</div> -->
+              <!-- /.link to designify.me code snippets -->
+            </div>
+          </div>
+          <!-- /.MultiStep Form -->
+        </div>
+      </section>
+
+      <script>
+        // alert('jhi')
+        document
+          .getElementById("msform")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            for (const [key, value] of formData.entries()) {
+              console.log(key, value);
+            }
+            fetch(
+              "https://thelynxschool.edu.pk/lynxadmin/public/api/admission-applications",
+              {
+                method: "POST",
+                body: formData,
+              }
+            )
+              .then(async (response) => {
+                const data = await response.json();
+                if (data.success) {
+                  alert("✅ Admission submitted successfully!");
+                  // window.location.reload();
+                  console.log(data);
+                } else {
+                  alert("❌ Something went wrong!");
+                  console.log(data);
+                }
+              })
+              .catch((error) => {
+                console.error("Error submitting application:", error);
+                alert("Submission failed!");
+              });
+          });
+      </script>
+
+      <footer>
+        <div class="container">
+          <div class="top-footer">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="lgocnt">
+                  <img
+                    src="assets/img/lnxlogo-removebg-preview.png"
+                    alt=" "
+                    style="
+                      height: 100%;
+                      width: 100%;
+                      padding: 0px 0px 20px 20px;
+                    "
+                  />
+                  <!-- <p
+									style="font-family:Edwardian Script ITC; font-size:32px; font-weight: 1000;  text-align: center; ">
+									<b>The Lynx School </b>
+								</p> -->
+                </div>
+                <div>
+                  <p style="padding: 0px 19px 0px 19px; text-align: justify">
+                    The Lynx School is a distinguished educational institution
+                    committed to providing a holistic and enriching learning
+                    experience with a focus on academic excellence, character
+                    building, and skill development.
+                  </p>
+                </div>
+              </div>
+              <!-- <div class="col-lg-3 col-md-6 col-sm-6">
+							<div class="widget widget-contact">
+								<ul class="contact-add">
+									<li>
+										<div class="contact-info">
+											<img src="assets/img/icon1.png" alt="">
+											<div class="contact-tt">
+												<h4>Call</h4>
+												<span>+92 51 4901010</span>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="contact-info">
+											<img src="assets/img/icon2.png" alt="">
+											<div class="contact-tt">
+												<h4>Work Time</h4>
+												<span>Mon - Fri 8 AM - 5 PM</span>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="contact-info">
+											<img src="assets/img/icon3.png" alt="">
+											<div class="contact-tt">
+												<h4>Head Office</h4>
+												<span>House 931, Street 91 Sector I-8/4 Islamabad.</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div> -->
+
+              <div class="col-lg-3 col-md-6 col-sm-6 footer-links-1">
+                <div class="widget widget-links">
+                  <h3 class="widget-title" style="padding-top: 60px"></h3>
+                  <ul>
+                    <li><a href="about.html" title="">About</a></li>
+                    <li><a href="career.html" title="">Careers</a></li>
+                    <li><a href="admissions.html" title="">Admissions </a></li>
+                    <li>
+                      <a href="affiliations.html" title="">Affiliations</a>
+                      <!-- <li><a href="gallery.html" title="">Gallery</a>
+									<li><a href="academics.html" title="">Academics</a>
+									<li><a href="alumni.html" title="">Alumni</a>
+									<li><a href="contacts.html" title="">Contact Us</a> -->
+                    </li>
+                  </ul>
+                </div>
+                <!--widget-links end-->
+              </div>
+
+              <div class="col-lg-3 col-md-6 col-sm-6 footer-links-2">
+                <div class="widget widget-links">
+                  <h3 class="widget-title" style="padding-top: 60px"></h3>
+                  <ul>
+                    <li><a href="gallery.html" title="">Gallery</a></li>
+                    <li><a href="academics.html" title="">Academics</a></li>
+                    <li><a href="alumni.html" title="">Alumni</a></li>
+                    <li><a href="contacts.html" title="">Contact Us</a></li>
+                  </ul>
+                </div>
+                <!--widget-links end-->
+              </div>
+
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget widget-contact">
+                  <ul class="contact-add" style="padding-top: 80px">
+                    <li>
+                      <div class="contact-info">
+                        <!-- <img src="assets/img/icon2.png" alt=""> -->
+                        <div class="contact-tt">
+                          <h4>Work Time</h4>
+                          <span>Mon - Fri 8 AM - 5 PM</span>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="contact-info">
+                        <!-- <img src="assets/img/icon2.png" alt=""> -->
+                        <div class="contact-tt">
+                          <h4>Social</h4>
+                          <ul
+                            class="social-links"
+                            style="display: flex; margin-top: 10px"
+                          >
+                            <li>
+                              <a
+                                href="https://www.facebook.com/profile.php?id=100089523870242"
+                                title=""
+                                ><i class="fab fa-facebook-f"></i
+                              ></a>
+                            </li>
+                            <!-- <li><a href="#" title=""><i class="fab fa-linkedin-in"></i></a></li> -->
+                            <li>
+                              <a
+                                href="https://www.instagram.com/the_lynx_school/"
+                                title=""
+                                ><i class="fab fa-instagram"></i
+                              ></a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 
+						<div class="col-lg-3 col-md-6 col-sm-6">
+							<div class="widget widget-iframe">
+								<iframe
+									src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13282.94423024342!2d73.07252444011125!3d33.66400030856211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38df95226e356f43%3A0xe681edb45923603!2sDAYCARE%20(THE%20LYNX%20SCHOOL%20SMC%20PVT%20LTD)!5e0!3m2!1sen!2s!4v1734169452664!5m2!1sen!2s"
+									width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+									referrerpolicy="no-referrer-when-downgrade"></iframe>
+								<iframe src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=1%20Grafton%20Street,%20Dublin,%20Ireland+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+							</div>widget-iframe end
+						</div> -->
+            </div>
+          </div>
+          <!--top-footer end-->
+          <div class="bottom-footer">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <p>© Copyrights 2024 The Lynx School</p>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <ul class="social-links">
+                  <p>All rights reserved</p>
+                  <!-- <li><a href="https://www.facebook.com/profile.php?id=100089523870242" title=""><i
+											class="fab fa-facebook-f"></i></a></li> -->
+                  <!-- <li><a href="#" title=""><i class="fab fa-linkedin-in"></i></a></li> -->
+                  <!-- <li><a href="https://www.instagram.com/the_lynx_school/" title=""><i
+											class="fab fa-instagram"></i></a></li> -->
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!--bottom-footer end-->
+        </div>
+      </footer>
+      <!--footer end-->
+
+      <!--back to top begin-->
+      <button class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+      <!--back to top end-->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/isotope.js"></script>
+    <script src="assets/js/html5lightbox.js"></script>
+    <script src="assets/js/slick.min.js"></script>
+    <script src="assets/js/tweenMax.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script>
+      //jQuery time
+      var current_fs, next_fs, previous_fs; //fieldsets
+      var left, opacity, scale; //fieldset properties which we will animate
+      var animating; //flag to prevent quick multi-click glitches
+
+      $(".next").click(function () {
+        if (animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+
+        //activate next step on progressbar using the index of next_fs
+        $("#progressbar li")
+          .eq($("fieldset").index(next_fs))
+          .addClass("active");
+
+        //show the next fieldset
+        next_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate(
+          { opacity: 0 },
+          {
+            step: function (now, mx) {
+              //as the opacity of current_fs reduces to 0 - stored in "now"
+              //1. scale current_fs down to 80%
+              scale = 1 - (1 - now) * 0.2;
+              //2. bring next_fs from the right(50%)
+              left = now * 50 + "%";
+              //3. increase opacity of next_fs to 1 as it moves in
+              opacity = 1 - now;
+              current_fs.css({
+                transform: "scale(" + scale + ")",
+                // position: "absolute"
+              });
+              next_fs.css({ left: left, opacity: opacity });
+            },
+            duration: 800,
+            complete: function () {
+              current_fs.hide();
+              animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: "easeInOutBack",
+          }
+        );
+      });
+
+      $(".previous").click(function () {
+        if (animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+
+        //de-activate current step on progressbar
+        $("#progressbar li")
+          .eq($("fieldset").index(current_fs))
+          .removeClass("active");
+
+        //show the previous fieldset
+        previous_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate(
+          { opacity: 0 },
+          {
+            step: function (now, mx) {
+              //as the opacity of current_fs reduces to 0 - stored in "now"
+              //1. scale previous_fs from 80% to 100%
+              scale = 0.8 + (1 - now) * 0.2;
+              //2. take current_fs to the right(50%) - from 0%
+              left = (1 - now) * 50 + "%";
+              //3. increase opacity of previous_fs to 1 as it moves in
+              opacity = 1 - now;
+              current_fs.css({ left: left });
+              previous_fs.css({
+                transform: "scale(" + scale + ")",
+                opacity: opacity,
+              });
+            },
+            duration: 800,
+            complete: function () {
+              current_fs.hide();
+              animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: "easeInOutBack",
+          }
+        );
+      });
+
+      // $(".submit").click(function () {
+      // 	return false;
+      // });
+    </script>
+  </body>
+</html>
