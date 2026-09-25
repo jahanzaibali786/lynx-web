@@ -31,10 +31,8 @@ header("Access-Control-Allow-Credentials: true");
 
 $host = 'localhost';
 $db = 'lynx_admin';
-// $user = 'creativesuite_coworkit_web';
 $user = 'lynx_admin';
 $pass = '12345678';
-// $pass = '12345678';
 
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {

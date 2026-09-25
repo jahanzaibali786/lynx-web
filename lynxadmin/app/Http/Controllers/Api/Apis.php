@@ -11,16 +11,36 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Models\AdmissionApplication;
 use App\Models\CareerApplication;
+use App\Models\CareerOpportunity;
 use App\Models\Gallery;
 use App\Models\GalleryImage;
 use App\Models\UpcomingEvent;
 use App\Models\News;
+use Illuminate\Support\Facades\Auth;
 
 
 
 
 class Apis extends Controller
 {
+    public function CheckAuth(Request $request)
+    {
+        // Check if user is authenticated
+        if (Auth::check()) {
+            return response()->json([
+                'authenticated' => true,
+                'user' => [
+                    'id' => Auth::id(),
+                    'name' => Auth::user()->name,
+                    'email' => Auth::user()->email,
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'authenticated' => false
+        ], 401);
+    }
     public function Blogs()
     {
         $blogs = Blog::where('status', 'published')
@@ -298,6 +318,33 @@ class Apis extends Controller
             'features' => $features,
             'matrix' => $matrix
         ]);
+    }
+
+    public function CareerOpportunities()
+    {
+        $opportunities = CareerOpportunity::where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($opportunity) {
+                $opportunity->encrypted_id = encrypt($opportunity->id);
+                return $opportunity;
+            });
+
+        return response()->json($opportunities);
+    }
+
+    public function CareerOpportunityDetail($encryptedId)
+    {
+        try {
+            $id = decrypt($encryptedId);
+            $opportunity = CareerOpportunity::where('is_active', true)
+                ->findOrFail($id);
+
+            $opportunity->encrypted_id = encrypt($opportunity->id);
+            return response()->json($opportunity);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Invalid opportunity ID'], 404);
+        }
     }
 
 }

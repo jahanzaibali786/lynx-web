@@ -288,12 +288,12 @@
 
             <header
                 style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; z-index: 9999999; transition: all 0.4s; height:100px;">
-                <div class="container" style="
+                <div class="container" style=" width:100% !important;  max-width:100% !important;
     height: 100%;
 ">
-                    <div class="row  md-center">
+                    <div class="row  md-center" style=" width:100% !important;  max-width:100% !important;">
                         <!-- <div " row "> -->
-                        <div class="col-lg-4   col  logo">
+                        <div class="col-lg-3   col  logo">
                             <a href="index.html" title="">
 
                                 <!-- <img src="assets/img/logo.png" alt="" srcset="assets/img/01_Logo_2x.png 2x"> -->
@@ -316,7 +316,7 @@
 
 
 
-                        <div class="col-8 navigation-bar   align-items-center   text-center ">
+                        <div class="col-9 navigation-bar   align-items-center   text-center ">
                             <nav>
                                 <ul>
                                     <!-- <li><a class="active" href="index.html" title="">Home</a></li> -->
@@ -332,6 +332,11 @@
                                     <li class="#">
                                         <a href="admissions.html" title="" class="admissions">Admissions</a>
                                     </li>
+                                    <li class="#">
+                                    <a href="fee-challan.html" title="" class="fee-challan-btn"
+                                      >Fee Challan</a
+                                    >
+                  </li>
                                 </ul>
                             </nav>
                             <!--nav end-->

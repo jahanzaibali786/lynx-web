@@ -33,6 +33,7 @@ use App\Filament\Resources\PricingPlans\PricingPlanResource;
 use App\Filament\Resources\Blogs\BlogResource;
 use App\Filament\Resources\AdmissionApplications\AdmissionApplicationResource;
 use App\Filament\Resources\CareerApplications\CareerApplicationResource;
+use App\Filament\Resources\CareerOpportunities\CareerOpportunityResource;
 use App\Filament\Resources\Galleries\GalleryResource;
 use App\Filament\Resources\GalleryImages\GalleryImageResource;
 use App\Filament\Resources\News\NewsResource;
@@ -105,6 +106,10 @@ class AdminPanelProvider extends PanelProvider
                     NavigationGroup::make()
                         ->items([
                             ...CareerApplicationResource::getNavigationItems()
+                        ]),
+                    NavigationGroup::make()
+                        ->items([
+                            ...CareerOpportunityResource::getNavigationItems()
                         ]),
                     NavigationGroup::make()
                         ->items([

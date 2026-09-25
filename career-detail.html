@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Career Details - The Lynx School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Career Opportunity Details" />
+    <meta name="author" content="The Lynx School" />
+    <link rel="icon" href="assets/img/lnxlogo-removebg-preview-icon.png" />
+    <link rel="stylesheet" type="text/css" href="assets/css/animate.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" />
+    <style>
+      .sectPlaceholderDummy {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        height: 400px;
+        border-radius: 8px;
+      }
+      @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      .HeadingBoxPlaceholder {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        height: 40px;
+        width: 300px;
+        margin: 0 auto;
+        border-radius: 4px;
+      }
+      #description {
+        line-height: 1.8;
+        font-size: 16px;
+        color: #333;
+        font-family: 'Poppins', sans-serif;
+        white-space: pre-wrap; /* Preserve spaces and line breaks */
+      }
+
+      /* Reset any inherited styles that might interfere */
+      #description * {
+        font-family: inherit;
+      }
+
+      /* Preserve whitespace in paragraphs and list items */
+      #description p,
+      #description li p {
+        white-space: pre-wrap;
+      }
+
+      /* Headings */
+      #description h1 {
+        color: #F32C2E;
+        font-size: 32px;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 20px;
+      }
+      #description h2 {
+        color: #F32C2E;
+        font-size: 28px;
+        font-weight: 700;
+        margin-top: 35px;
+        margin-bottom: 18px;
+      }
+      #description h3 {
+        color: #120D52;
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 30px;
+        margin-bottom: 15px;
+      }
+      #description h4 {
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 25px;
+        margin-bottom: 12px;
+      }
+
+      /* Paragraphs */
+      #description p {
+        margin-bottom: 15px;
+        line-height: 1.8;
+      }
+
+      /* Text formatting - IMPORTANT: Override all other styles */
+      #description strong,
+      #description b,
+      #description p strong,
+      #description p b,
+      #description li strong,
+      #description li b,
+      #description li p strong,
+      #description li p b,
+      #description h2 strong,
+      #description h3 strong {
+        font-weight: 700 !important;
+        color: #000 !important;
+        font-family: inherit !important;
+      }
+
+      #description em,
+      #description i,
+      #description p em,
+      #description p i {
+        font-style: italic !important;
+      }
+
+      #description u {
+        text-decoration: underline !important;
+      }
+
+      #description s,
+      #description strike {
+        text-decoration: line-through !important;
+      }
+
+      /* Lists - Force bullet points to show - Override main.css */
+      .job-detail #description ul,
+      .job-detail #description ol {
+        margin: 15px 0 !important;
+        padding-left: 40px !important;
+        list-style-position: outside !important;
+      }
+
+      .job-detail #description ul {
+        list-style-type: disc !important;
+        list-style: disc !important;
+      }
+
+      .job-detail #description ol {
+        list-style-type: decimal !important;
+        list-style: decimal !important;
+      }
+
+      .job-detail #description li {
+        margin-bottom: 10px !important;
+        line-height: 1.6 !important;
+        display: list-item !important;
+        list-style: disc !important;
+        list-style-type: disc !important;
+        padding-left: 0 !important;
+      }
+
+      .job-detail #description ol li {
+        list-style: decimal !important;
+        list-style-type: decimal !important;
+      }
+
+      .job-detail #description li p {
+        margin-bottom: 5px;
+        display: inline;
+      }
+
+      /* Nested lists */
+      .job-detail #description ul ul,
+      .job-detail #description ol ul {
+        list-style-type: circle !important;
+        margin-top: 5px !important;
+      }
+
+      .job-detail #description ul ul li {
+        list-style-type: circle !important;
+      }
+
+      .job-detail #description ul ul ul,
+      .job-detail #description ol ul ul {
+        list-style-type: square !important;
+      }
+
+      .job-detail #description ul ul ul li {
+        list-style-type: square !important;
+      }
+
+      /* Links */
+      #description a {
+        color: #F32C2E;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+      }
+      #description a:hover {
+        color: #120D52;
+      }
+
+      /* Blockquotes */
+      #description blockquote {
+        border-left: 4px solid #F32C2E;
+        padding-left: 20px;
+        margin: 20px 0;
+        font-style: italic;
+        color: #666;
+        background: #f9f9f9;
+        padding: 15px 20px;
+        border-radius: 4px;
+      }
+
+      /* Code blocks */
+      #description pre {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        overflow-x: auto;
+        margin: 15px 0;
+      }
+      #description code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+      }
+      #description pre code {
+        background: transparent;
+        padding: 0;
+      }
+
+      /* Line breaks */
+      #description br {
+        display: block;
+        margin: 5px 0;
+        content: "";
+      }
+      .apply-now-btn {
+        background: linear-gradient(to bottom, #F32C2E, #120D52);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .apply-now-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(243, 44, 46, 0.4);
+        color: white;
+        text-decoration: none;
+      }
+      .job-meta {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+      }
+      .job-meta h4 {
+        color: #F32C2E;
+        margin-bottom: 15px;
+      }
+      .job-meta p {
+        margin-bottom: 10px;
+        color: #666;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <header style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; z-index: 9999999; transition: all 0.4s; height: 100px;">
+        <div class="container" style="height: 100%">
+          <div class="row md-center">
+            <div class="col-lg-4 col logo">
+              <a href="index.html" title="">
+                <div class="lgocnt" style="height: 100px;">
+                  <img src="assets/img/lnxlogo-removebg-preview.png" alt=" " style="height: 100%; padding: 20px 0px 20px 20px;" />
+                </div>
+              </a>
+            </div>
+            <div class="col-8 navigation-bar align-items-center text-center">
+              <nav>
+                <ul>
+                  <li><a href="about.html" title="">About</a></li>
+                  <li><a href="academics.html" title="">Academics</a></li>
+                  <li><a href="affiliations.html" title="">Affiliations</a></li>
+                  <li><a href="gallery.html" title="">Gallery</a></li>
+                  <li class="#"><a href="career.html" title="">Careers</a></li>
+                  <li><a href="alumni.html" title="">Alumni</a></li>
+                  <li><a href="contacts.html" title="">Contact Us</a></li>
+                  <li class="#"><a href="admissions.html" title="" class="admissions">Admissions</a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="col-md-2 menu-btn">
+              <a href="#">
+                <span class="bar1"></span>
+                <span class="bar2"></span>
+                <span class="bar3"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="responsive-menu">
+        <ul>
+          <li><a href="index.html" title="">Home</a></li>
+          <li><a href="about.html" title="">About</a></li>
+          <li><a href="career.html" title="">Careers</a></li>
+          <li><a href="admissions.html" title="">Admissions </a></li>
+          <li><a href="affiliations.html" title="">Affiliations</a></li>
+          <li><a href="gallery.html" title="">Gallery</a></li>
+          <li><a href="academics.html" title="">Academics</a></li>
+          <li><a href="alumni.html" title="">Alumni</a></li>
+          <li><a href="contacts.html" title="">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <section class="pager-section CareerPic">
+        <div class="container">
+          <div class="pager-content text-center">
+            <h2><div class="HeadingBoxPlaceholder"></div></h2>
+            <ul>
+              <li><a href="index.html" title="">Home</a></li>
+              <li><a href="career.html" title="">Careers</a></li>
+              <li><span id="breadcrumb-position">Position</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Loading Placeholder -->
+      <section class="page-content" id="page-content-dummy" style="margin-top: 80px;">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="sectPlaceholderDummy"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actual Content -->
+      <section class="page-content d-none" id="page-content-actual" style="margin-top: 80px; margin-bottom: 80px;">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="job-detail">
+                <div class="job-meta">
+                  <h4>Position Details</h4>
+                  <p id="short-description"></p>
+                  <p id="posted-date"></p>
+                </div>
+
+                <div id="description"></div>
+
+                <div class="text-center">
+                  <a href="career.html#career-form" class="apply-now-btn">
+                    Apply Now <i class="fa fa-long-arrow-alt-right"></i>
+                  </a>
+                  <div id="pdf-download" style="margin-top: 20px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="container">
+          <div class="top-footer">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="lgocnt">
+                  <img
+                    src="assets/img/lnxlogo-removebg-preview.png"
+                    alt=" "
+                    style="
+                      height: 100%;
+                      width: 86%;
+                      padding: 0px 0px 20px 20px;
+                    "
+                  />
+                  <!-- <p
+									style="font-family:Edwardian Script ITC; font-size:32px; font-weight: 1000;  text-align: center; ">
+									<b>The Lynx School </b>
+								</p> -->
+                </div>
+                <div>
+                  <p style="padding: 0px 19px 0px 19px; text-align: justify">
+                    The Lynx School is a renowned academic institution deeply committed to providing a better, holistic and enriching learning
+                                experience, with a strong focus on academic excellence with individual character building, and personal skill development.
+                  </p>
+                </div>
+              </div>
+              <!-- <div class="col-lg-3 col-md-6 col-sm-6">
+							<div class="widget widget-contact">
+								<ul class="contact-add">
+									<li>
+										<div class="contact-info">
+											<img src="assets/img/icon1.png" alt="">
+											<div class="contact-tt">
+												<h4>Call</h4>
+												<span>+92 51 4901010</span>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="contact-info">
+											<img src="assets/img/icon2.png" alt="">
+											<div class="contact-tt">
+												<h4>Work Time</h4>
+												<span>Mon - Fri 8 AM - 5 PM</span>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="contact-info">
+											<img src="assets/img/icon3.png" alt="">
+											<div class="contact-tt">
+												<h4>Head Office</h4>
+												<span>House 931, Street 91 Sector I-8/4 Islamabad.</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div> -->
+
+              <div class="col-lg-3 col-md-6 col-sm-6 footer-links-1">
+                <div class="widget widget-links">
+                  <h3 class="widget-title" style="padding-top: 60px"></h3>
+                  <ul>
+                    <li><a href="about.html" title="">About</a></li>
+                    <li><a href="career.html" title="">Careers</a></li>
+                    <li><a href="admissions.html" title="">Admissions </a></li>
+                    <li>
+                      <a href="affiliations.html" title="">Affiliations</a>
+                      <!-- <li><a href="gallery.html" title="">Gallery</a>
+									<li><a href="academics.html" title="">Academics</a>
+									<li><a href="alumni.html" title="">Alumni</a>
+									<li><a href="contacts.html" title="">Contact Us</a> -->
+                    </li>
+                  </ul>
+                </div>
+                <!--widget-links end-->
+              </div>
+
+              <div class="col-lg-3 col-md-6 col-sm-6 footer-links-2">
+                <div class="widget widget-links">
+                  <h3 class="widget-title" style="padding-top: 60px"></h3>
+                  <ul>
+                    <li><a href="gallery.html" title="">Gallery</a></li>
+                    <li><a href="academics.html" title="">Academics</a></li>
+                    <li><a href="alumni.html" title="">Alumni</a></li>
+                    <li><a href="contacts.html" title="">Contact Us</a></li>
+                  </ul>
+                </div>
+                <!--widget-links end-->
+              </div>
+
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget widget-contact">
+                  <ul class="contact-add" style="padding-top: 80px">
+                    <li>
+                      <div class="contact-info">
+                        <!-- <img src="assets/img/icon2.png" alt=""> -->
+                        <div class="contact-tt">
+                          <h4>Work Time</h4>
+                          <span>Mon - Fri 8 AM - 5 PM</span>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="contact-info">
+                        <!-- <img src="assets/img/icon2.png" alt=""> -->
+                        <div class="contact-tt">
+                          <h4>Social</h4>
+                          <ul
+                            class="social-links"
+                            style="display: flex; margin-top: 10px"
+                          >
+                            <li>
+                              <a
+                                href="https://www.facebook.com/profile.php?id=100089523870242"
+                                title=""
+                                ><i class="fab fa-facebook-f"></i
+                              ></a>
+                            </li>
+                            <!-- <li><a href="#" title=""><i class="fab fa-linkedin-in"></i></a></li> -->
+                            <li>
+                              <a
+                                href="https://www.instagram.com/the_lynx_school/"
+                                title=""
+                                ><i class="fab fa-instagram"></i
+                              ></a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 
+						<div class="col-lg-3 col-md-6 col-sm-6">
+							<div class="widget widget-iframe">
+								<iframe
+									src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13282.94423024342!2d73.07252444011125!3d33.66400030856211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38df95226e356f43%3A0xe681edb45923603!2sDAYCARE%20(THE%20LYNX%20SCHOOL%20SMC%20PVT%20LTD)!5e0!3m2!1sen!2s!4v1734169452664!5m2!1sen!2s"
+									width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+									referrerpolicy="no-referrer-when-downgrade"></iframe>
+								<iframe src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=1%20Grafton%20Street,%20Dublin,%20Ireland+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+							</div>widget-iframe end
+						</div> -->
+            </div>
+          </div>
+          <!--top-footer end-->
+          <div class="bottom-footer">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <p>© Copyrights 2024 The Lynx School</p>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <ul class="social-links">
+                  <p>All rights reserved</p>
+                  <!-- <li><a href="https://www.facebook.com/profile.php?id=100089523870242" title=""><i
+											class="fab fa-facebook-f"></i></a></li> -->
+                  <!-- <li><a href="#" title=""><i class="fab fa-linkedin-in"></i></a></li> -->
+                  <!-- <li><a href="https://www.instagram.com/the_lynx_school/" title=""><i
+											class="fab fa-instagram"></i></a></li> -->
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!--bottom-footer end-->
+        </div>
+      </footer>
+
+      <button class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/isotope.js"></script>
+    <script src="assets/js/html5lightbox.js"></script>
+    <script src="assets/js/slick.min.js"></script>
+    <script src="assets/js/tweenMax.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        const jobId = params.get("id");
+
+        if (!jobId) {
+          window.location.href = "career.html";
+          return;
+        }
+
+        // Function to decode HTML entities
+        function decodeHtmlEntities(text) {
+          const textarea = document.createElement('textarea');
+          textarea.innerHTML = text;
+          return textarea.value;
+        }
+
+        fetch(`lynxadmin/public/api/career-opportunities/${jobId}`)
+          .then((res) => {
+            if (!res.ok) throw new Error("Job not found");
+            return res.json();
+          })
+          .then((job) => {
+            // Update page title and breadcrumb
+            document.title = `${job.position_name} - The Lynx School`;
+            document.querySelector(".pager-content h2").textContent = job.position_name;
+            document.getElementById("breadcrumb-position").textContent = job.position_name;
+
+            // Short description
+            document.getElementById("short-description").innerHTML = `<strong>Overview:</strong> ${job.short_description}`;
+
+            // Posted date
+            const postedDate = new Date(job.created_at).toLocaleDateString("en-GB", {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+            document.getElementById("posted-date").innerHTML = `<strong>Posted:</strong> ${postedDate}`;
+
+            // Full description (rich text content) - decode HTML entities
+            const decodedDescription = decodeHtmlEntities(job.full_description || "<p>No detailed description available.</p>");
+            document.getElementById("description").innerHTML = decodedDescription;
+
+            // PDF download link (if available)
+            if (job.detail_pdf) {
+              document.getElementById("pdf-download").innerHTML = `
+                <a href="lynxadmin/public/storage/${job.detail_pdf}"
+                   target="_blank"
+                   class="btn btn-outline-primary">
+                  <i class="fa fa-file-pdf"></i> Download Job Details (PDF)
+                </a>
+              `;
+            }
+
+            // Show content, hide placeholder
+            $("#page-content-dummy").hide();
+            $("#page-content-actual").removeClass("d-none");
+          })
+          .catch((err) => {
+            console.error("Error loading job:", err);
+            alert("Job not found or no longer available.");
+            window.location.href = "career.html";
+          });
+      });
+    </script>
+  </body>
+</html>
+

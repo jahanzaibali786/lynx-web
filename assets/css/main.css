@@ -112,7 +112,6 @@ nav ul li a:hover {
     border-radius: 4px;
     width: 100%;
 }
-
 /* Hover effect for all tabs */
 nav ul li a:hover::after {
     content: "";
@@ -1136,7 +1135,9 @@ header .navigation-bar nav ul ul ul {
     justify-content: center;
 
 }
-
+.blog-section .blog-posts .blog-post .blog-thum img{
+    height: 200px !important;
+}
 @media only screen and (max-width: 640px) {
     .blog-section .blog-posts .blog-post .blog-thum {
         height: initial;
