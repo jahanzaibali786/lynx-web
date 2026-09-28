@@ -333,7 +333,7 @@
                                         <a href="admissions.html" title="" class="admissions">Admissions</a>
                                     </li>
                                     <li class="#">
-                                    <a href="fee-challan.html" title="" class="fee-challan-btn"
+                                    <a href="fee-challan.html" title="" class="admissions"
                                       >Fee Challan</a
                                     >
                   </li>

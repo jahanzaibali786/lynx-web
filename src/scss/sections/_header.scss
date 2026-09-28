@@ -139,3 +139,34 @@ header {
 		}
 	}
 }
+/* Keep the desktop header navigation balanced and on one row. */
+@media only screen and (min-width: 1201px) {
+    header > .container > .row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    header .navigation-bar {
+        flex: 1 1 auto;
+        width: auto;
+        max-width: none;
+        padding: 0;
+        white-space: nowrap;
+    }
+    header .navigation-bar nav {
+        width: 100%;
+    }
+    header .navigation-bar nav > ul {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: clamp(12px, 1.5vw, 28px);
+        white-space: nowrap;
+    }
+    header .navigation-bar nav > ul > li {
+        flex: 0 0 auto;
+        margin-right: 0;
+    }
+    header .menu-btn { display: none; }
+}

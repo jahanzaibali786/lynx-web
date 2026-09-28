@@ -4925,3 +4925,36 @@ p.simple-card {
     top: 0;
     transform: translateY(-100%);
 }
+/* Header alignment: keep the desktop navigation on one balanced row. */
+@media only screen and (min-width: 1201px) {
+    header > .container > .row {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+    }
+    header .navigation-bar {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        padding: 0 !important;
+        white-space: nowrap !important;
+    }
+    header .navigation-bar nav {
+        width: 100% !important;
+    }
+    header .navigation-bar nav > ul {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: clamp(12px, 1.5vw, 28px) !important;
+        white-space: nowrap !important;
+    }
+    header .navigation-bar nav > ul > li {
+        flex: 0 0 auto !important;
+        margin-right: 0 !important;
+    }
+    header .menu-btn {
+        display: none !important;
+    }
+}
