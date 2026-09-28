@@ -659,7 +659,8 @@
         .receipt-line { display:grid; grid-template-columns:1fr auto auto; gap:15px; padding:10px 14px; border-top:1px solid #e2e8f0; font-size:13px; }
         .empty-receipt { padding:10px 14px; color:#94a3b8; font-size:13px; }
         .file-control { height:auto; padding:9px; }
-        @media(max-width:700px){ .challan-card{padding:24px 18px}.cnic-action-row{grid-template-columns:1fr auto auto}.child-actions{grid-template-columns:1fr}.receipt-line{grid-template-columns:1fr}.statement-head{display:block}.portal-modal{padding:8px} }
+        @media(max-width:700px){
+        .student-repeater-row{grid-template-columns:1fr !important;} .challan-card{padding:24px 18px}.cnic-action-row{grid-template-columns:1fr auto auto}.child-actions{grid-template-columns:1fr}.receipt-line{grid-template-columns:1fr}.statement-head{display:block}.portal-modal{padding:8px} }
     </style>
 </head>
 <body>
@@ -711,6 +712,80 @@
                 </div>
 
                 <div id="statusAlert" class="status-alert"></div></form>
+                        <div class="portal-modal" id="updateRequestModal" aria-hidden="true">
+                <div class="portal-modal-card portal-modal-lg">
+                    <div class="portal-modal-header">
+                        <h3 style="display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-user-pen" style="color:#2563eb"></i> Request to Update Data</h3>
+                        <button type="button" onclick="closePortalModal('updateRequestModal')">&times;</button>
+                    </div>
+                    <form class="portal-modal-body" id="updateRequestForm" onsubmit="submitParentUpdateRequest(event)">
+                        <div id="updateRequestAlert" class="status-alert" style="display:none;margin-bottom:16px;"></div>
+
+                        <!-- Parent Info -->
+                        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:18px;">
+                            <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                                <i class="fa-solid fa-id-card" style="color:#2563eb"></i> Parent / Guardian Information
+                            </h4>
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqParentName">Parent Name <span style="color:#dc2626;">*</span></label>
+                                    <input type="text" id="reqParentName" class="input-control" placeholder="e.g. Muhammad Ali" required>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqPhoneNo">Phone No <span style="color:#dc2626;">*</span></label>
+                                    <input type="tel" id="reqPhoneNo" class="input-control" placeholder="e.g. 03001234567 or +923001234567" maxlength="14" required autocomplete="tel">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqCnic">Parents CNIC <span style="color:#dc2626;">*</span></label>
+                                    <input type="text" id="reqCnic" class="input-control" placeholder="XXXXX-XXXXXXX-X" maxlength="15" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Details Repeater -->
+                        <div style="background:#ffffff;border:1.5px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:18px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                                <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:0;display:flex;align-items:center;gap:6px;">
+                                    <i class="fa-solid fa-graduation-cap" style="color:#2563eb"></i> Student Details
+                                </h4>
+                                <button type="button" class="child-action-btn" onclick="addStudentRepeaterRow()" style="background:#eff6ff;border-color:#3b82f6;color:#1d4ed8;display:inline-flex;align-items:center;gap:5px;">
+                                    <i class="fa-solid fa-plus"></i> Add Child
+                                </button>
+                            </div>
+                            <div id="studentRepeaterContainer" style="display:flex;flex-direction:column;gap:12px;">
+                                <!-- Dynamically generated repeater rows -->
+                            </div>
+                        </div>
+
+                        <!-- CNIC Pictures Upload -->
+                        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:20px;">
+                            <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                                <i class="fa-solid fa-camera" style="color:#2563eb"></i> CNIC Pictures Upload (Front & Back)
+                            </h4>
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:14px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqCnicFront">CNIC Front Picture <span style="color:#dc2626;">*</span> <small style="font-weight:normal;color:#64748b;">(Max 1MB)</small></label>
+                                    <input type="file" id="reqCnicFront" class="input-control file-control" accept="image/*,.pdf" required onchange="previewFileThumb(this, 'frontThumb')">
+                                    <div id="frontThumb" style="margin-top:6px;display:none;"></div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqCnicBack">CNIC Back Picture <span style="color:#dc2626;">*</span> <small style="font-weight:normal;color:#64748b;">(Max 1MB)</small></label>
+                                    <input type="file" id="reqCnicBack" class="input-control file-control" accept="image/*,.pdf" required onchange="previewFileThumb(this, 'backThumb')">
+                                    <div id="backThumb" style="margin-top:6px;display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;">
+                            <button type="button" class="btn-reset" style="display:inline-flex;" onclick="closePortalModal('updateRequestModal')">Cancel</button>
+                            <button type="submit" class="btn-search" id="reqSubmitBtn" style="background-color:#2563eb;display:inline-flex;gap:7px;">
+                                <span id="reqSubmitBtnText">Submit Request</span>
+                                <i class="fa-solid fa-paper-plane" id="reqSubmitBtnIcon"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="portal-modal" id="statementModal" aria-hidden="true">
                 <div class="portal-modal-card portal-modal-lg">
                     <div class="portal-modal-header"><h3>Last 3 Months Fee Statement</h3><button type="button" onclick="closePortalModal('statementModal')">&times;</button></div>
@@ -834,10 +909,314 @@
         function showContactAlert(){
             const box=document.getElementById('statusAlert');
             box.className='status-alert error';
-            box.innerHTML='No active student record was found. Please contact your respective branch for assistance. <a href="contacts.html" style="font-weight:800;text-decoration:underline">View branch contact details</a>.';
+            box.innerHTML=`
+                <div style="font-weight:800;font-size:14px;margin-bottom:6px;"><i class="fa-solid fa-circle-exclamation me-1"></i> No active student record was found for this CNIC.</div>
+                <div style="font-size:13px;line-height:1.5;margin-bottom:12px;color:#475569;">Please contact your child's branch (contact details) or complete the below-provided Form to have your record updated within 24 hours.</div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                    <a href="contacts.html" class="child-action-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#fff;border-color:#cbd5e1;color:#334155;">
+                        <i class="fa-solid fa-phone"></i> View Branch Contacts
+                    </a>
+                    <button type="button" class="btn-search" onclick="openUpdateRequestModal()" style="padding:8px 18px;font-size:13px;background-color:#2563eb;display:inline-flex;gap:6px;">
+                        <i class="fa-solid fa-user-pen"></i> Request to Update data
+                    </button>
+                </div>
+            `;
             box.style.display='block';
         }        function hideAlert(){ document.getElementById('statusAlert').style.display='none'; }
         function escapeHtml(value){ const node=document.createElement('div'); node.textContent=String(value ?? ''); return node.innerHTML; }
+        
+        // ── Data Update Request Functions ────────────────────────────────
+        let activeBranchesList = [];
+
+        async function fetchActiveBranches() {
+            if (activeBranchesList.length > 0) return activeBranchesList;
+            try {
+                const res = await fetch(`${API_BASE_URL}/active-branches`, { headers: { Accept: 'application/json' } });
+                const json = await res.json();
+                if (json.success && Array.isArray(json.data)) {
+                    activeBranchesList = json.data;
+                }
+            } catch (e) {
+                console.error('Failed to fetch active branches:', e);
+            }
+            return activeBranchesList;
+        }
+
+        function buildBranchOptionsHtml(selectedId = '') {
+            let html = '<option value="">Select Branch...</option>';
+            activeBranchesList.forEach(b => {
+                const sel = String(b.id) === String(selectedId) ? 'selected' : '';
+                html += `<option value="${escapeHtml(b.id)}" ${sel}>${escapeHtml(b.name)}</option>`;
+            });
+            return html;
+        }
+
+        async function openUpdateRequestModal() {
+            const currentCnic = (cnicInput ? cnicInput.value.trim() : '');
+            const reqCnicEl = document.getElementById('reqCnic');
+            if (reqCnicEl) {
+                reqCnicEl.value = currentCnic;
+            }
+            const alertEl = document.getElementById('updateRequestAlert');
+            if (alertEl) {
+                alertEl.style.display = 'none';
+            }
+
+            await fetchActiveBranches();
+
+            const container = document.getElementById('studentRepeaterContainer');
+            if (container && container.children.length === 0) {
+                addStudentRepeaterRow();
+            }
+
+            openPortalModal('updateRequestModal');
+        }
+
+        function addStudentRepeaterRow(data = {}) {
+            const container = document.getElementById('studentRepeaterContainer');
+            if (!container) return;
+
+            const row = document.createElement('div');
+            row.className = 'student-repeater-row';
+            row.style.cssText = 'background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;position:relative;display:grid;grid-template-columns:1.2fr 1fr 1.3fr auto;gap:10px;align-items:end;';
+
+            row.innerHTML = `
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:12px;font-weight:700;">Active Branch <span style="color:#dc2626;">*</span></label>
+                    <select class="input-control student-branch" required>
+                        ${buildBranchOptionsHtml(data.branch_id || '')}
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:12px;font-weight:700;">Student Roll No.</label>
+                    <input type="text" class="input-control student-roll" placeholder="e.g. 10243" value="${escapeHtml(data.roll_no || '')}">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="font-size:12px;font-weight:700;">Student Name <span style="color:#dc2626;">*</span></label>
+                    <input type="text" class="input-control student-name" placeholder="Full Student Name" value="${escapeHtml(data.student_name || '')}" required>
+                </div>
+                <div>
+                    <button type="button" class="child-action-btn remove-row-btn" onclick="removeStudentRepeaterRow(this)" style="background:#fee2e2;border-color:#fca5a5;color:#dc2626;padding:9px 12px;margin:0;" title="Remove this child">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(row);
+            updateRepeaterRemoveButtons();
+        }
+
+        function removeStudentRepeaterRow(btn) {
+            const container = document.getElementById('studentRepeaterContainer');
+            if (!container || container.children.length <= 1) return;
+            const row = btn.closest('.student-repeater-row');
+            if (row) row.remove();
+            updateRepeaterRemoveButtons();
+        }
+
+        function updateRepeaterRemoveButtons() {
+            const container = document.getElementById('studentRepeaterContainer');
+            if (!container) return;
+            const rows = container.querySelectorAll('.student-repeater-row');
+            rows.forEach((r, idx) => {
+                const btn = r.querySelector('.remove-row-btn');
+                if (btn) {
+                    btn.style.display = rows.length > 1 ? 'inline-block' : 'none';
+                }
+            });
+        }
+
+        function previewFileThumb(input, targetId) {
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            const file = input.files[0];
+            if (!file) {
+                target.innerHTML = '';
+                target.style.display = 'none';
+                return;
+            }
+
+            const MAX_SIZE = 1 * 1024 * 1024; // 1 MB
+            if (file.size > MAX_SIZE) {
+                const sizeInMb = (file.size / (1024 * 1024)).toFixed(2);
+                alert(`File size (${sizeInMb} MB) exceeds the 1 MB limit. Please upload an image under 1 MB.`);
+                input.value = '';
+                target.innerHTML = '';
+                target.style.display = 'none';
+                return;
+            }
+
+            if (file.type && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    target.innerHTML = `<img src="${e.target.result}" style="max-height:80px;border-radius:4px;border:1px solid #cbd5e1;margin-top:6px;">`;
+                    target.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                target.innerHTML = `<span class="badge" style="background:#e0f2fe;color:#0369a1;padding:4px 8px;display:inline-block;margin-top:6px;"><i class="fa-solid fa-file-pdf"></i> ${escapeHtml(file.name)}</span>`;
+                target.style.display = 'block';
+            }
+        }
+
+        async function submitParentUpdateRequest(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('updateRequestAlert');
+            alertBox.style.display = 'none';
+
+            const parentName = document.getElementById('reqParentName').value.trim();
+            const phoneNo = document.getElementById('reqPhoneNo').value.trim();
+            const phoneDigits = phoneNo.replace(/\D/g, '');
+
+            if (phoneDigits.length < 10 || phoneDigits.length > 13) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = 'Please enter a valid phone number (11 to 13 digits, e.g. 03001234567 or +923001234567).';
+                alertBox.style.display = 'block';
+                return;
+            }
+            const cnic = document.getElementById('reqCnic').value.trim();
+            const frontFile = document.getElementById('reqCnicFront').files[0];
+            const backFile = document.getElementById('reqCnicBack').files[0];
+
+            if (cnic.replace(/\D/g, '').length !== 13) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = 'Please enter a valid 13-digit CNIC number.';
+                alertBox.style.display = 'block';
+                return;
+            }
+
+            const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1 MB
+            if (frontFile && frontFile.size > MAX_IMAGE_SIZE) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = 'CNIC Front picture exceeds 1 MB limit. Please upload an image under 1 MB.';
+                alertBox.style.display = 'block';
+                return;
+            }
+            if (backFile && backFile.size > MAX_IMAGE_SIZE) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = 'CNIC Back picture exceeds 1 MB limit. Please upload an image under 1 MB.';
+                alertBox.style.display = 'block';
+                return;
+            }
+
+            const rows = document.querySelectorAll('#studentRepeaterContainer .student-repeater-row');
+            const students = [];
+            for (let i = 0; i < rows.length; i++) {
+                const branchId = rows[i].querySelector('.student-branch').value;
+                const rollNo = rows[i].querySelector('.student-roll').value.trim();
+                const studentName = rows[i].querySelector('.student-name').value.trim();
+
+                if (!branchId) {
+                    alertBox.className = 'status-alert error';
+                    alertBox.textContent = `Please select an active branch for student #${i + 1}.`;
+                    alertBox.style.display = 'block';
+                    return;
+                }
+                if (!studentName) {
+                    alertBox.className = 'status-alert error';
+                    alertBox.textContent = `Please enter student name for student #${i + 1}.`;
+                    alertBox.style.display = 'block';
+                    return;
+                }
+
+                students.push({
+                    branch_id: branchId,
+                    roll_no: rollNo,
+                    student_name: studentName
+                });
+            }
+
+            if (students.length === 0) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = 'Please add at least one student record.';
+                alertBox.style.display = 'block';
+                return;
+            }
+
+            if (!frontFile || !backFile) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = 'Both CNIC Front and CNIC Back pictures are required.';
+                alertBox.style.display = 'block';
+                return;
+            }
+
+            const submitBtn = document.getElementById('reqSubmitBtn');
+            const submitText = document.getElementById('reqSubmitBtnText');
+            const submitIcon = document.getElementById('reqSubmitBtnIcon');
+            submitBtn.disabled = true;
+            submitText.textContent = 'Submitting Request...';
+            submitIcon.className = 'fa-solid fa-spinner fa-spin';
+
+            const formData = new FormData();
+            formData.append('parent_name', parentName);
+            formData.append('phone_no', phoneNo);
+            formData.append('cnic', cnic);
+            formData.append('cnic_front', frontFile);
+            formData.append('cnic_back', backFile);
+            formData.append('students', JSON.stringify(students));
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/parent-update-requests`, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json'
+                    },
+                    body: formData
+                });
+
+                const payload = await res.json();
+                if (!res.ok) {
+                    throw new Error(payload.message || Object.values(payload.errors || {}).flat().join(' '));
+                }
+
+                alertBox.className = 'status-alert success';
+                alertBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${escapeHtml(payload.message || 'Update request submitted successfully!')}`;
+                alertBox.style.display = 'block';
+
+                document.getElementById('updateRequestForm').reset();
+                const fThumb = document.getElementById('frontThumb');
+                if (fThumb) { fThumb.innerHTML = ''; fThumb.style.display = 'none'; }
+                const bThumb = document.getElementById('backThumb');
+                if (bThumb) { bThumb.innerHTML = ''; bThumb.style.display = 'none'; }
+                document.getElementById('studentRepeaterContainer').innerHTML = '';
+                addStudentRepeaterRow();
+
+                setTimeout(() => {
+                    closePortalModal('updateRequestModal');
+                    showAlert('Your data update request has been submitted successfully. The respective branch will review your request.', 'success');
+                }, 2000);
+            } catch (err) {
+                alertBox.className = 'status-alert error';
+                alertBox.textContent = err.message || 'Submission failed. Please check your connection and try again.';
+                alertBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = 'Submit Request';
+                submitIcon.className = 'fa-solid fa-paper-plane';
+            }
+        }
+
+        // Auto-format CNIC in update request modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const reqPhoneInput = document.getElementById('reqPhoneNo');
+            if (reqPhoneInput) {
+                reqPhoneInput.addEventListener('input', function(e) {
+                    let val = e.target.value;
+                    let hasPlus = val.startsWith('+');
+                    let digits = val.replace(/\D/g, '').slice(0, 13);
+                    e.target.value = (hasPlus ? '+' : '') + digits;
+                });
+            }
+
+            const reqCnicInput = document.getElementById('reqCnic');
+            if (reqCnicInput) {
+                reqCnicInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '').slice(0, 13);
+                    e.target.value = value.slice(0,5) + (value.length > 5 ? '-' + value.slice(5,12) : '') + (value.length > 12 ? '-' + value.slice(12) : '');
+                });
+            }
+        });
+
         window.addEventListener('pageshow', function () {
             const savedCnic = sessionStorage.getItem('feeChallanCnic');
             if (savedCnic && !cnicInput.value && !fetchedChildrenList.length) {
