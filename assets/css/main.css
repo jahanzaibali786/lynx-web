@@ -2872,7 +2872,7 @@ footer .bottom-footer .social-links {
     top: 0;
     left: 0;
     width: 300px;
-    background-color: #f79133;
+    background-color: #fff;
     -ms-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     -o-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -2901,10 +2901,31 @@ footer .bottom-footer .social-links {
 }
 
 .responsive-menu ul li a {
-    color: #fff;
+    color: #202735;
     font-size: 20px;
     font-weight: 500;
     font-family: Poppins, sans-serif;
+}
+
+/* The desktop admission styling uses a white pill, which is not readable
+   against the old orange mobile drawer. Keep these actions high-contrast in
+   the hamburger menu while leaving desktop navigation unchanged. */
+.responsive-menu ul li a.admissions {
+    display: block;
+    width: 100%;
+    padding: 12px 18px !important;
+    color: #fff !important;
+    background-image: linear-gradient(210deg, #f32c2e, #f37335) !important;
+    border: 1px solid #f32c2e;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(243, 44, 46, .18);
+}
+
+.responsive-menu ul li a.admissions:hover,
+.responsive-menu ul li a.admissions:focus {
+    color: #fff !important;
+    background-image: linear-gradient(210deg, #d92326, #e45d24) !important;
 }
 
 #html5-watermark {

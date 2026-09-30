@@ -92,6 +92,23 @@
     /**
      * Responsive Mobile Menu
      */
+    // Keep the hamburger menu in sync with the desktop navigation. Several
+    // legacy pages contain their own navigation markup, so deriving the mobile
+    // list here prevents links (such as Fee Challan) from silently disappearing
+    // on smaller screens.
+    var desktopMenu = $(".navigation-bar nav > ul").first();
+    var mobileMenu = $(".responsive-menu > ul").first();
+    if (desktopMenu.length && mobileMenu.length) {
+      var desktopItems = desktopMenu.children("li").clone(true, true);
+      var hasHome = desktopItems.find('a[href="index.html"]').length > 0;
+
+      mobileMenu.empty();
+      if (!hasHome) {
+        mobileMenu.append('<li><a href="index.html" title="">Home</a></li>');
+      }
+      mobileMenu.append(desktopItems);
+    }
+
     $(".menu-btn").on("click", function () {
       $(this).toggleClass("active");
       $(".responsive-menu").toggleClass("active");

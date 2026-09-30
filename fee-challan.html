@@ -43,8 +43,6 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(245, 242, 237, 0.52);
-            backdrop-filter: blur(1.5px);
             -webkit-backdrop-filter: blur(1.5px);
             z-index: 1;
         }
@@ -661,7 +659,12 @@
         .file-control { height:auto; padding:9px; }
         @media(max-width:700px){
         .student-repeater-row{grid-template-columns:1fr !important;} .challan-card{padding:24px 18px}.cnic-action-row{grid-template-columns:1fr auto auto}.child-actions{grid-template-columns:1fr}.receipt-line{grid-template-columns:1fr}.statement-head{display:block}.portal-modal{padding:8px} }
-    </style>
+    
+        .parent-tab { border:0; background:transparent; color:#64748b; font-weight:700; padding:8px 16px; cursor:pointer; border-bottom:2px solid transparent; transition: all 0.2s; font-size:13px; }
+        .parent-tab.active { color:#2563eb; border-bottom-color:#2563eb; }
+        .parent-tab:hover { color:#1d4ed8; }
+        .parent-info-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+</style>
 </head>
 <body>
 
@@ -702,9 +705,14 @@
 
                 <!-- Children Cards List on CNIC Search -->
                 <div class="children-list-container" id="childrenListGroup">
-                    <div class="children-list-header">
-                        <i class="fa-solid fa-users" style="color: #3b82f6;"></i>
-                        <span>Select a student to open details:</span>
+                    <div class="children-list-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <i class="fa-solid fa-users" style="color: #3b82f6;"></i>
+                            <span>Select a student to open details:</span>
+                        </div>
+                        <button type="button" class="child-action-btn" onclick="openUpdateRequestModal(true)" style="background:#eff6ff;border-color:#3b82f6;color:#1d4ed8;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;font-size:12px;font-weight:700;">
+                            <i class="fa-solid fa-user-plus"></i> Request to Attach Another Child
+                        </button>
                     </div>
                     <div class="child-cards-grid" id="childCardsList">
                         <!-- Populated dynamically on CNIC search -->
@@ -712,81 +720,153 @@
                 </div>
 
                 <div id="statusAlert" class="status-alert"></div></form>
-                        <div class="portal-modal" id="updateRequestModal" aria-hidden="true">
-                <div class="portal-modal-card portal-modal-lg">
-                    <div class="portal-modal-header">
-                        <h3 style="display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-user-pen" style="color:#2563eb"></i> Request to Update Data</h3>
-                        <button type="button" onclick="closePortalModal('updateRequestModal')">&times;</button>
-                    </div>
-                    <form class="portal-modal-body" id="updateRequestForm" onsubmit="submitParentUpdateRequest(event)">
-                        <div id="updateRequestAlert" class="status-alert" style="display:none;margin-bottom:16px;"></div>
+                        <div class="portal-modal" id="updateRequestModal" aria-hidden="true" onclick="if(event.target===this)closePortalModal('updateRequestModal')">
+        <div class="portal-modal-card portal-modal-lg" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,0.35);max-width:760px;width:100%;">
+            <div class="portal-modal-header" style="background:linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);color:#ffffff;padding:16px 20px;border-bottom:0;display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <h3 style="color:#ffffff;font-size:16px;font-weight:800;margin:0;display:flex;align-items:center;gap:8px;">
+                        <i class="fa-solid fa-user-pen"></i> Request Student & Parent Record Update
+                    </h3>
+                    <p style="margin:4px 0 0;font-size:12px;color:#e0e7ff;opacity:0.95;">Submit updated details and documents for branch verification.</p>
+                </div>
+                <button type="button" style="color:#ffffff;opacity:0.85;font-size:26px;border:0;background:transparent;cursor:pointer;line-height:1;" onclick="closePortalModal('updateRequestModal')">&times;</button>
+            </div>
+            <div class="portal-modal-body" style="padding:20px;max-height:calc(90vh - 80px);overflow-y:auto;background:#ffffff;">
+                <div id="updateRequestAlert" class="status-alert" style="display:none;margin-bottom:16px;"></div>
 
-                        <!-- Parent Info -->
-                        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:18px;">
-                            <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-                                <i class="fa-solid fa-id-card" style="color:#2563eb"></i> Parent / Guardian Information
-                            </h4>
-                            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;">
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="reqParentName">Parent Name <span style="color:#dc2626;">*</span></label>
-                                    <input type="text" id="reqParentName" class="input-control" placeholder="e.g. Muhammad Ali" required>
-                                </div>
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="reqPhoneNo">Phone No <span style="color:#dc2626;">*</span></label>
-                                    <input type="tel" id="reqPhoneNo" class="input-control" placeholder="e.g. 03001234567 or +923001234567" maxlength="14" required autocomplete="tel">
-                                </div>
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="reqCnic">Parents CNIC <span style="color:#dc2626;">*</span></label>
-                                    <input type="text" id="reqCnic" class="input-control" placeholder="XXXXX-XXXXXXX-X" maxlength="15" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Student Details Repeater -->
-                        <div style="background:#ffffff;border:1.5px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:18px;">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                                <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:0;display:flex;align-items:center;gap:6px;">
-                                    <i class="fa-solid fa-graduation-cap" style="color:#2563eb"></i> Student Details
-                                </h4>
-                                <button type="button" class="child-action-btn" onclick="addStudentRepeaterRow()" style="background:#eff6ff;border-color:#3b82f6;color:#1d4ed8;display:inline-flex;align-items:center;gap:5px;">
-                                    <i class="fa-solid fa-plus"></i> Add Child
-                                </button>
-                            </div>
-                            <div id="studentRepeaterContainer" style="display:flex;flex-direction:column;gap:12px;">
-                                <!-- Dynamically generated repeater rows -->
-                            </div>
-                        </div>
-
-                        <!-- CNIC Pictures Upload -->
-                        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:20px;">
-                            <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-                                <i class="fa-solid fa-camera" style="color:#2563eb"></i> CNIC Pictures Upload (Front & Back)
-                            </h4>
-                            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:14px;">
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="reqCnicFront">CNIC Front Picture <span style="color:#dc2626;">*</span> <small style="font-weight:normal;color:#64748b;">(Max 1MB)</small></label>
-                                    <input type="file" id="reqCnicFront" class="input-control file-control" accept="image/*,.pdf" required onchange="previewFileThumb(this, 'frontThumb')">
-                                    <div id="frontThumb" style="margin-top:6px;display:none;"></div>
-                                </div>
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="reqCnicBack">CNIC Back Picture <span style="color:#dc2626;">*</span> <small style="font-weight:normal;color:#64748b;">(Max 1MB)</small></label>
-                                    <input type="file" id="reqCnicBack" class="input-control file-control" accept="image/*,.pdf" required onchange="previewFileThumb(this, 'backThumb')">
-                                    <div id="backThumb" style="margin-top:6px;display:none;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;">
-                            <button type="button" class="btn-reset" style="display:inline-flex;" onclick="closePortalModal('updateRequestModal')">Cancel</button>
-                            <button type="submit" class="btn-search" id="reqSubmitBtn" style="background-color:#2563eb;display:inline-flex;gap:7px;">
-                                <span id="reqSubmitBtnText">Submit Request</span>
-                                <i class="fa-solid fa-paper-plane" id="reqSubmitBtnIcon"></i>
+                <form id="updateRequestForm" onsubmit="submitParentUpdateRequest(event)">
+                    <!-- Parent / Guardian Details with Tabs -->
+                    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:18px;">
+                        <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+                            <i class="fa-solid fa-id-card" style="color:#2563eb"></i> Parent / Guardian Information
+                        </h4>
+                        <p style="font-size:12px;color:#64748b;margin:0 0 12px;">Fill Father Details, Mother Details, or both. Each filled parent must include their respective CNIC pictures (Front & Back).</p>
+                        
+                        <div class="parent-tabs" style="display:flex;gap:8px;border-bottom:1px solid #e2e8f0;margin-bottom:14px;">
+                            <button type="button" class="parent-tab active" data-parent-tab="father" onclick="switchParentTab('father')">
+                                <i class="fa-solid fa-user-tie me-1"></i> Father Details
+                            </button>
+                            <button type="button" class="parent-tab" data-parent-tab="mother" onclick="switchParentTab('mother')">
+                                <i class="fa-solid fa-user-nurse me-1"></i> Mother Details
                             </button>
                         </div>
-                    </form>
-                </div>
+                        <input type="hidden" id="reqParentRelation" value="father">
+
+                        <!-- Father Tab Pane -->
+                        <div class="parent-tab-pane active" data-parent-pane="father">
+                            <div class="parent-info-grid">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqFatherName">Father Name</label>
+                                    <input type="text" id="reqFatherName" class="input-control" placeholder="e.g. Muhammad Ali">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqFatherCnic">Father CNIC</label>
+                                    <input type="text" id="reqFatherCnic" class="input-control parent-cnic-input" placeholder="XXXXX-XXXXXXX-X" maxlength="15">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqFatherPhone">Father Phone No</label>
+                                    <input type="tel" id="reqFatherPhone" class="input-control parent-phone-input" placeholder="03001234567" maxlength="14">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqFatherEmail">Father Email Address</label>
+                                    <input type="email" id="reqFatherEmail" class="input-control" placeholder="father@example.com">
+                                </div>
+                            </div>
+                            <!-- Father CNIC Uploads -->
+                            <div style="margin-top:14px;background:#ffffff;border:1px dashed #cbd5e1;border-radius:6px;padding:12px;">
+                                <h5 style="font-size:12.5px;color:#334155;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+                                    <i class="fa-solid fa-camera" style="color:#2563eb"></i> Father CNIC Pictures (Front & Back)
+                                </h5>
+                                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;">
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="reqFatherCnicFront" style="font-size:12px;font-weight:700;">Father CNIC Front <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <input type="file" id="reqFatherCnicFront" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'frontThumbFather')">
+                                        <div id="frontThumbFather" style="margin-top:6px;display:none;"></div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="reqFatherCnicBack" style="font-size:12px;font-weight:700;">Father CNIC Back <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <input type="file" id="reqFatherCnicBack" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'backThumbFather')">
+                                        <div id="backThumbFather" style="margin-top:6px;display:none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mother Tab Pane -->
+                        <div class="parent-tab-pane" data-parent-pane="mother" style="display:none;">
+                            <div class="parent-info-grid">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqMotherName">Mother Name</label>
+                                    <input type="text" id="reqMotherName" class="input-control" placeholder="e.g. Misbah Sajid">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqMotherCnic">Mother CNIC</label>
+                                    <input type="text" id="reqMotherCnic" class="input-control parent-cnic-input" placeholder="XXXXX-XXXXXXX-X" maxlength="15">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqMotherPhone">Mother Phone No</label>
+                                    <input type="tel" id="reqMotherPhone" class="input-control parent-phone-input" placeholder="03001234567" maxlength="14">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="reqMotherEmail">Mother Email Address</label>
+                                    <input type="email" id="reqMotherEmail" class="input-control" placeholder="mother@example.com">
+                                </div>
+                            </div>
+                            <!-- Mother CNIC Uploads -->
+                            <div style="margin-top:14px;background:#ffffff;border:1px dashed #cbd5e1;border-radius:6px;padding:12px;">
+                                <h5 style="font-size:12.5px;color:#334155;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+                                    <i class="fa-solid fa-camera" style="color:#2563eb"></i> Mother CNIC Pictures (Front & Back)
+                                </h5>
+                                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;">
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="reqMotherCnicFront" style="font-size:12px;font-weight:700;">Mother CNIC Front <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <input type="file" id="reqMotherCnicFront" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'frontThumbMother')">
+                                        <div id="frontThumbMother" style="margin-top:6px;display:none;"></div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="reqMotherCnicBack" style="font-size:12px;font-weight:700;">Mother CNIC Back <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <input type="file" id="reqMotherCnicBack" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'backThumbMother')">
+                                        <div id="backThumbMother" style="margin-top:6px;display:none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Combined Residential Address (One for both) -->
+                        <div class="form-group" style="margin:14px 0 0;">
+                            <label for="reqAddress">Residential Address <span style="color:#dc2626;">*</span></label>
+                            <textarea id="reqAddress" class="input-control" rows="2" placeholder="House # 123, Street 4, Sector..." required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Student Details Repeater -->
+                    <div style="background:#ffffff;border:1.5px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:18px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                            <h4 style="font-size:13.5px;color:#1e293b;font-weight:800;margin-bottom:0;display:flex;align-items:center;gap:6px;">
+                                <i class="fa-solid fa-graduation-cap" style="color:#2563eb"></i> Student Details
+                            </h4>
+                            <button type="button" class="child-action-btn" onclick="addStudentRepeaterRow()" style="background:#eff6ff;border-color:#3b82f6;color:#1d4ed8;display:inline-flex;align-items:center;gap:5px;">
+                                <i class="fa-solid fa-plus"></i> Add Child
+                            </button>
+                        </div>
+                        <div id="studentRepeaterContainer" style="display:flex;flex-direction:column;gap:12px;">
+                            <!-- Dynamically generated repeater rows -->
+                        </div>
+                    </div>
+
+                    <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;">
+                        <button type="button" class="btn-reset" style="display:inline-flex;" onclick="closePortalModal('updateRequestModal')">Cancel</button>
+                        <button type="submit" class="btn-search" id="reqSubmitBtn" style="background-color:#2563eb;display:inline-flex;gap:7px;">
+                            <span id="reqSubmitBtnText">Submit Request</span>
+                            <i class="fa-solid fa-paper-plane" id="reqSubmitBtnIcon"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="portal-modal" id="statementModal" aria-hidden="true">
+        </div>
+    </div>
+
+    <div class="portal-modal" id="statementModal" aria-hidden="true">
                 <div class="portal-modal-card portal-modal-lg">
                     <div class="portal-modal-header"><h3>Last 3 Months Fee Statement</h3><button type="button" onclick="closePortalModal('statementModal')">&times;</button></div>
                     <div class="portal-modal-body" id="statementContent"></div>
@@ -818,8 +898,10 @@
         const cnicInput = document.getElementById('cnic');
         let fetchedChildrenList = [];
         let challanCache = {};
+        let activeParentRelation = 'father';
 
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const currentYearEl = document.getElementById('currentYear');
+        if (currentYearEl) currentYearEl.textContent = new Date().getFullYear();
         updateChallanMonthHeader();
         cnicInput.addEventListener('input', function (event) {
             let value = event.target.value.replace(/\D/g, '').slice(0, 13);
@@ -829,22 +911,28 @@
         function updateChallanMonthHeader() {
             const date = new Date();
             if (date.getDate() > 25) date.setMonth(date.getMonth() + 1);
-            document.getElementById('challanMonthText').textContent = `Fee Challan Month Of ${date.toLocaleString('en-US',{month:'long'})} ${date.getFullYear()}`;
+            const monthEl = document.getElementById('challanMonthText');
+            if (monthEl) monthEl.textContent = `Fee Challan Month Of ${date.toLocaleString('en-US',{month:'long'})} ${date.getFullYear()}`;
         }
 
         async function handleFormSubmit(event) {
             event.preventDefault();
             const cnic = cnicInput.value.trim();
-            if (cnic.replace(/\D/g,'').length !== 13) return showAlert('Please enter a valid 13-digit Parents CNIC.', 'error');
-            setButtonLoading(true, 'Fetching Children...'); hideAlert();
+            if (cnic.replace(/\D/g, '').length !== 13) { showAlert('Please enter a valid 13-digit CNIC number.', 'error'); return; }
+            setButtonLoading(true); hideAlert();
             try {
-                const response = await fetch(`${API_BASE_URL}/students-by-cnic?cnic=${encodeURIComponent(cnic)}`, {headers:{Accept:'application/json'}});
+                const response = await fetch(`${API_BASE_URL}/parents/${encodeURIComponent(cnic)}/children`, {headers:{Accept:'application/json'}});
                 const payload = await response.json();
                 if (response.status === 404) { showContactAlert(); return; }
                 if (!response.ok) throw new Error(payload.message || 'Unable to search students.');
                 fetchedChildrenList = (payload.data || []).filter(student => student.active_status == 1 || String(student.student_status).toLowerCase() === 'active');
                 if (!fetchedChildrenList.length) { showContactAlert(); return; }
                 const first = fetchedChildrenList[0];
+                const searchedDigits = cnic.replace(/\D/g, '');
+                const isMother = (first.mother_cnic && first.mother_cnic.replace(/\D/g, '') === searchedDigits) ||
+                                 (first.mother_nic && first.mother_nic.replace(/\D/g, '') === searchedDigits) ||
+                                 (first.matched_parent === 'mother');
+                activeParentRelation = isMother ? 'mother' : 'father';
                 const parents = [first.father_name, first.mother_name].map(v => String(v || '').trim()).filter((v,i,a) => v && a.indexOf(v) === i);
                 const parentName = (parents.join(' / ') || 'Verified Parent').toUpperCase();
                 document.getElementById('displayParentName').textContent = parentName;
@@ -854,7 +942,7 @@
                 document.getElementById('resetBtn').style.display = 'inline-flex';
                 document.getElementById('searchBtn').style.display = 'none';
                 cnicInput.readOnly = true; cnicInput.style.backgroundColor = '#f8f9fa';
-                showAlert(`Found ${fetchedChildrenList.length} active child(ren) for ${parentName}.`, 'success');
+                showAttachAnotherChildAlert();
             } catch (error) { showAlert(error.message || 'Unable to fetch children.', 'error'); }
             finally { setButtonLoading(false); }
         }
@@ -906,6 +994,21 @@
         function resetForm(){ sessionStorage.removeItem('feeChallanCnic'); fetchedChildrenList=[]; challanCache={}; cnicInput.readOnly=false; cnicInput.style.backgroundColor='#fff'; cnicInput.value=''; document.getElementById('parentInfoBadge').style.display='none'; document.getElementById('childrenListGroup').style.display='none'; document.getElementById('childCardsList').innerHTML=''; document.getElementById('resetBtn').style.display='none'; document.getElementById('searchBtn').style.display='inline-flex'; hideAlert(); cnicInput.focus(); }
         function setButtonLoading(loading,text='Searching...'){ const button=document.getElementById('searchBtn'); button.disabled=loading; document.getElementById('searchBtnText').textContent=loading?text:'Search'; document.getElementById('searchBtnIcon').className=loading?'fa-solid fa-spinner fa-spin':'fa-solid fa-check'; }
         function showAlert(message,type){ const box=document.getElementById('statusAlert'); box.className=`status-alert ${type}`; box.textContent=message; box.style.display='block'; }
+        function showAttachAnotherChildAlert() {
+            const box = document.getElementById('statusAlert');
+            box.className = 'status-alert warning';
+            box.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                    <div>
+                        <div style="font-weight:800;font-size:13.5px;color:#92400e;"><i class="fa-solid fa-circle-info me-1"></i> Missing a child or need to update records?</div>
+                        <div style="font-size:12.5px;line-height:1.4;color:#78350f;">If another child is missing, submit their details for branch verification and attachment to this parent record.</div>
+                    </div>
+                    <button type="button" class="btn-search" onclick="openUpdateRequestModal(true)" style="padding:8px 16px;font-size:13px;background-color:#2563eb;display:inline-flex;gap:6px;align-items:center;white-space:nowrap;">
+                        <i class="fa-solid fa-user-plus"></i> Request to Attach Another Child
+                    </button>
+                </div>`;
+            box.style.display = 'block';
+        }
         function showContactAlert(){
             const box=document.getElementById('statusAlert');
             box.className='status-alert error';
@@ -922,47 +1025,94 @@
                 </div>
             `;
             box.style.display='block';
-        }        function hideAlert(){ document.getElementById('statusAlert').style.display='none'; }
+        }
+        function hideAlert(){ document.getElementById('statusAlert').style.display='none'; }
         function escapeHtml(value){ const node=document.createElement('div'); node.textContent=String(value ?? ''); return node.innerHTML; }
-        
+
         // ── Data Update Request Functions ────────────────────────────────
         let activeBranchesList = [];
 
         async function fetchActiveBranches() {
             if (activeBranchesList.length > 0) return activeBranchesList;
             try {
-                const res = await fetch(`${API_BASE_URL}/active-branches`, { headers: { Accept: 'application/json' } });
-                const json = await res.json();
-                if (json.success && Array.isArray(json.data)) {
-                    activeBranchesList = json.data;
+                const res = await fetch(`${API_BASE_URL}/active-branches`, {
+                    headers: { Accept: 'application/json' }
+                });
+                const payload = await res.json();
+                if (payload && (payload.status === 'success' || payload.success === true || payload.is_success === true) && Array.isArray(payload.data)) {
+                    activeBranchesList = payload.data;
+                    updateAllBranchDropdowns();
                 }
             } catch (e) {
-                console.error('Failed to fetch active branches:', e);
+                console.error('Failed to load active branches:', e);
             }
             return activeBranchesList;
         }
 
-        function buildBranchOptionsHtml(selectedId = '') {
-            let html = '<option value="">Select Branch...</option>';
-            activeBranchesList.forEach(b => {
-                const sel = String(b.id) === String(selectedId) ? 'selected' : '';
-                html += `<option value="${escapeHtml(b.id)}" ${sel}>${escapeHtml(b.name)}</option>`;
+        function updateAllBranchDropdowns() {
+            document.querySelectorAll('#studentRepeaterContainer .student-branch').forEach(select => {
+                const curVal = select.value;
+                select.innerHTML = buildBranchOptionsHtml(curVal);
+                if (curVal) select.value = curVal;
             });
-            return html;
         }
 
-        async function openUpdateRequestModal() {
-            const currentCnic = (cnicInput ? cnicInput.value.trim() : '');
-            const reqCnicEl = document.getElementById('reqCnic');
-            if (reqCnicEl) {
-                reqCnicEl.value = currentCnic;
-            }
-            const alertEl = document.getElementById('updateRequestAlert');
-            if (alertEl) {
-                alertEl.style.display = 'none';
+        function buildBranchOptionsHtml(selectedId = '') {
+            let options = '<option value="">-- Select Branch --</option>';
+            activeBranchesList.forEach(branch => {
+                const isSel = String(branch.id) === String(selectedId) ? 'selected' : '';
+                const branchName = branch.branch_name || branch.name || `Branch #${branch.id}`;
+                options += `<option value="${escapeHtml(branch.id)}" ${isSel}>${escapeHtml(branchName)}</option>`;
+            });
+            return options;
+        }
+
+        async function openUpdateRequestModal(attachAnotherChild = false) {
+            const currentCnic = cnicInput.value.trim();
+            const firstChild = fetchedChildrenList[0] || {};
+            
+            if (attachAnotherChild && fetchedChildrenList.length > 0) {
+                const fatherNameEl = document.getElementById('reqFatherName');
+                const fatherCnicEl = document.getElementById('reqFatherCnic');
+                const fatherPhoneEl = document.getElementById('reqFatherPhone');
+                const fatherEmailEl = document.getElementById('reqFatherEmail');
+
+                const motherNameEl = document.getElementById('reqMotherName');
+                const motherCnicEl = document.getElementById('reqMotherCnic');
+                const motherPhoneEl = document.getElementById('reqMotherPhone');
+                const motherEmailEl = document.getElementById('reqMotherEmail');
+
+                const addressEl = document.getElementById('reqAddress');
+
+                if (fatherNameEl && !fatherNameEl.value) fatherNameEl.value = String(firstChild.father_name || '').toUpperCase();
+                if (fatherCnicEl && !fatherCnicEl.value) fatherCnicEl.value = firstChild.father_nic || (activeParentRelation !== 'mother' ? currentCnic : '');
+                if (fatherPhoneEl && !fatherPhoneEl.value) fatherPhoneEl.value = firstChild.father_phone || firstChild.phone || firstChild.phone_no || '';
+                if (fatherEmailEl && !fatherEmailEl.value) fatherEmailEl.value = firstChild.father_email || firstChild.email || '';
+
+                if (motherNameEl && !motherNameEl.value) motherNameEl.value = String(firstChild.mother_name || '').toUpperCase();
+                if (motherCnicEl && !motherCnicEl.value) motherCnicEl.value = firstChild.mother_nic || (activeParentRelation === 'mother' ? currentCnic : '');
+                if (motherPhoneEl && !motherPhoneEl.value) motherPhoneEl.value = firstChild.mother_phone || '';
+                if (motherEmailEl && !motherEmailEl.value) motherEmailEl.value = firstChild.mother_email || '';
+
+                if (addressEl && !addressEl.value) addressEl.value = firstChild.address || '';
+            } else if (currentCnic) {
+                if (activeParentRelation === 'mother') {
+                    document.getElementById('reqMotherCnic').value = currentCnic;
+                    switchParentTab('mother');
+                } else {
+                    document.getElementById('reqFatherCnic').value = currentCnic;
+                    switchParentTab('father');
+                }
             }
 
-            await fetchActiveBranches();
+            const alertEl = document.getElementById('updateRequestAlert');
+            if (alertEl) {
+                alertEl.className = 'status-alert ' + (attachAnotherChild ? 'warning' : '');
+                alertEl.textContent = attachAnotherChild ? 'Enter the missing child details below. The request will be sent to the relevant branch for verification.' : '';
+                alertEl.style.display = attachAnotherChild ? 'block' : 'none';
+            }
+
+            await fetchActiveBranches(); updateAllBranchDropdowns();
 
             const container = document.getElementById('studentRepeaterContainer');
             if (container && container.children.length === 0) {
@@ -970,6 +1120,13 @@
             }
 
             openPortalModal('updateRequestModal');
+        }
+
+        function switchParentTab(tab) {
+            const relation = tab === 'mother' ? 'mother' : 'father';
+            document.getElementById('reqParentRelation').value = relation;
+            document.querySelectorAll('[data-parent-tab]').forEach(button => button.classList.toggle('active', button.dataset.parentTab === relation));
+            document.querySelectorAll('[data-parent-pane]').forEach(pane => pane.style.display = pane.dataset.parentPane === relation ? 'block' : 'none');
         }
 
         function addStudentRepeaterRow(data = {}) {
@@ -1015,47 +1172,33 @@
         }
 
         function updateRepeaterRemoveButtons() {
-            const container = document.getElementById('studentRepeaterContainer');
-            if (!container) return;
-            const rows = container.querySelectorAll('.student-repeater-row');
-            rows.forEach((r, idx) => {
-                const btn = r.querySelector('.remove-row-btn');
-                if (btn) {
-                    btn.style.display = rows.length > 1 ? 'inline-block' : 'none';
-                }
+            const rows = document.querySelectorAll('#studentRepeaterContainer .student-repeater-row');
+            rows.forEach(row => {
+                const btn = row.querySelector('.remove-row-btn');
+                if (btn) btn.style.display = rows.length > 1 ? 'inline-flex' : 'none';
             });
         }
 
-        function previewFileThumb(input, targetId) {
-            const target = document.getElementById(targetId);
-            if (!target) return;
-            const file = input.files[0];
+        function previewFileThumb(input, thumbContainerId) {
+            const container = document.getElementById(thumbContainerId);
+            if (!container) return;
+            container.innerHTML = '';
+            const file = input.files && input.files[0];
             if (!file) {
-                target.innerHTML = '';
-                target.style.display = 'none';
+                container.style.display = 'none';
                 return;
             }
 
-            const MAX_SIZE = 1 * 1024 * 1024; // 1 MB
-            if (file.size > MAX_SIZE) {
-                const sizeInMb = (file.size / (1024 * 1024)).toFixed(2);
-                alert(`File size (${sizeInMb} MB) exceeds the 1 MB limit. Please upload an image under 1 MB.`);
-                input.value = '';
-                target.innerHTML = '';
-                target.style.display = 'none';
-                return;
-            }
-
-            if (file.type && file.type.startsWith('image/')) {
+            if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    target.innerHTML = `<img src="${e.target.result}" style="max-height:80px;border-radius:4px;border:1px solid #cbd5e1;margin-top:6px;">`;
-                    target.style.display = 'block';
+                    container.innerHTML = `<img src="${e.target.result}" style="max-height:80px;border-radius:4px;border:1px solid #cbd5e1;box-shadow:0 1px 3px rgba(0,0,0,0.1);">`;
+                    container.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
             } else {
-                target.innerHTML = `<span class="badge" style="background:#e0f2fe;color:#0369a1;padding:4px 8px;display:inline-block;margin-top:6px;"><i class="fa-solid fa-file-pdf"></i> ${escapeHtml(file.name)}</span>`;
-                target.style.display = 'block';
+                container.innerHTML = `<span style="font-size:12px;color:#475569;"><i class="fa-solid fa-file-lines me-1"></i> ${escapeHtml(file.name)}</span>`;
+                container.style.display = 'block';
             }
         }
 
@@ -1064,39 +1207,113 @@
             const alertBox = document.getElementById('updateRequestAlert');
             alertBox.style.display = 'none';
 
-            const parentName = document.getElementById('reqParentName').value.trim();
-            const phoneNo = document.getElementById('reqPhoneNo').value.trim();
-            const phoneDigits = phoneNo.replace(/\D/g, '');
+            const father = {
+                name: (document.getElementById('reqFatherName')?.value || '').trim(),
+                cnic: (document.getElementById('reqFatherCnic')?.value || '').trim(),
+                phone: (document.getElementById('reqFatherPhone')?.value || '').trim(),
+                email: (document.getElementById('reqFatherEmail')?.value || '').trim(),
+                frontFile: document.getElementById('reqFatherCnicFront')?.files[0],
+                backFile: document.getElementById('reqFatherCnicBack')?.files[0]
+            };
 
-            if (phoneDigits.length < 10 || phoneDigits.length > 13) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = 'Please enter a valid phone number (11 to 13 digits, e.g. 03001234567 or +923001234567).';
-                alertBox.style.display = 'block';
-                return;
+            const mother = {
+                name: (document.getElementById('reqMotherName')?.value || '').trim(),
+                cnic: (document.getElementById('reqMotherCnic')?.value || '').trim(),
+                phone: (document.getElementById('reqMotherPhone')?.value || '').trim(),
+                email: (document.getElementById('reqMotherEmail')?.value || '').trim(),
+                frontFile: document.getElementById('reqMotherCnicFront')?.files[0],
+                backFile: document.getElementById('reqMotherCnicBack')?.files[0]
+            };
+
+            const address = (document.getElementById('reqAddress')?.value || '').trim();
+
+            const fatherHasFiles = Boolean(father.frontFile || father.backFile);
+            const motherHasFiles = Boolean(mother.frontFile || mother.backFile);
+
+            let fatherHasData = false;
+            let motherHasData = false;
+
+            if (fatherHasFiles && motherHasFiles) {
+                fatherHasData = true;
+                motherHasData = true;
+            } else if (fatherHasFiles) {
+                fatherHasData = true;
+                motherHasData = false;
+            } else if (motherHasFiles) {
+                fatherHasData = false;
+                motherHasData = true;
+            } else {
+                // Determine by which parent tab has inputs or is active
+                const activeTab = document.getElementById('reqParentRelation')?.value || 'father';
+                const fatherHasFilled = Boolean(father.name || father.cnic || father.phone);
+                const motherHasFilled = Boolean(mother.name || mother.cnic || mother.phone);
+
+                if (fatherHasFilled && motherHasFilled) {
+                    if (activeTab === 'mother') {
+                        motherHasData = true;
+                    } else if (activeTab === 'father') {
+                        fatherHasData = true;
+                    } else {
+                        fatherHasData = true;
+                        motherHasData = true;
+                    }
+                } else if (motherHasFilled) {
+                    motherHasData = true;
+                } else if (fatherHasFilled) {
+                    fatherHasData = true;
+                } else {
+                    if (activeTab === 'mother') motherHasData = true;
+                    else fatherHasData = true;
+                }
             }
-            const cnic = document.getElementById('reqCnic').value.trim();
-            const frontFile = document.getElementById('reqCnicFront').files[0];
-            const backFile = document.getElementById('reqCnicBack').files[0];
 
-            if (cnic.replace(/\D/g, '').length !== 13) {
+            if (!fatherHasData && !motherHasData) {
                 alertBox.className = 'status-alert error';
-                alertBox.textContent = 'Please enter a valid 13-digit CNIC number.';
+                alertBox.textContent = 'Please fill in Father details, Mother details, or both along with CNIC pictures.';
                 alertBox.style.display = 'block';
                 return;
             }
 
             const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1 MB
-            if (frontFile && frontFile.size > MAX_IMAGE_SIZE) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = 'CNIC Front picture exceeds 1 MB limit. Please upload an image under 1 MB.';
-                alertBox.style.display = 'block';
-                return;
+
+            if (fatherHasData) {
+                if (!father.name) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Father Name.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                }
+                if (father.cnic.replace(/\D/g, '').length !== 13) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter a valid 13-digit Father CNIC number.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                }
+                if (!father.phone) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Father Phone Number.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                }
+                if (!father.frontFile || !father.backFile) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Both Father CNIC Front and CNIC Back pictures are required.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                }
+                if (father.frontFile.size > MAX_IMAGE_SIZE || father.backFile.size > MAX_IMAGE_SIZE) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Father CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                }
             }
-            if (backFile && backFile.size > MAX_IMAGE_SIZE) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = 'CNIC Back picture exceeds 1 MB limit. Please upload an image under 1 MB.';
-                alertBox.style.display = 'block';
-                return;
+
+            if (motherHasData) {
+                if (!mother.name) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Mother Name.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                }
+                if (mother.cnic.replace(/\D/g, '').length !== 13) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter a valid 13-digit Mother CNIC number.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                }
+                if (!mother.phone) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Mother Phone Number.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                }
+                if (!mother.frontFile || !mother.backFile) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Both Mother CNIC Front and CNIC Back pictures are required.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                }
+                if (mother.frontFile.size > MAX_IMAGE_SIZE || mother.backFile.size > MAX_IMAGE_SIZE) {
+                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Mother CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                }
+            }
+
+            if (!address) {
+                alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter the residential address.'; alertBox.style.display = 'block'; return;
             }
 
             const rows = document.querySelectorAll('#studentRepeaterContainer .student-repeater-row');
@@ -1133,13 +1350,6 @@
                 return;
             }
 
-            if (!frontFile || !backFile) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = 'Both CNIC Front and CNIC Back pictures are required.';
-                alertBox.style.display = 'block';
-                return;
-            }
-
             const submitBtn = document.getElementById('reqSubmitBtn');
             const submitText = document.getElementById('reqSubmitBtnText');
             const submitIcon = document.getElementById('reqSubmitBtnIcon');
@@ -1148,12 +1358,49 @@
             submitIcon.className = 'fa-solid fa-spinner fa-spin';
 
             const formData = new FormData();
-            formData.append('parent_name', parentName);
-            formData.append('phone_no', phoneNo);
-            formData.append('cnic', cnic);
-            formData.append('cnic_front', frontFile);
-            formData.append('cnic_back', backFile);
+            let parentRelation = 'father';
+            if (fatherHasData && motherHasData) {
+                parentRelation = 'both';
+            } else if (motherHasData) {
+                parentRelation = 'mother';
+            }
+
+            formData.append('parent_relation', parentRelation);
+            formData.append('address', address);
             formData.append('students', JSON.stringify(students));
+
+            if (fatherHasData) {
+                formData.append('father_name', father.name);
+                formData.append('father_cnic', father.cnic);
+                formData.append('father_phone', father.phone);
+                formData.append('father_email', father.email);
+                formData.append('father_cnic_front', father.frontFile);
+                formData.append('father_cnic_back', father.backFile);
+                // Backward compatibility aliases
+                formData.append('cnic_front', father.frontFile);
+                formData.append('cnic_back', father.backFile);
+                formData.append('parent_name', father.name);
+                formData.append('cnic', father.cnic);
+                formData.append('phone_no', father.phone);
+                formData.append('email', father.email);
+            }
+
+            if (motherHasData) {
+                formData.append('mother_name', mother.name);
+                formData.append('mother_cnic', mother.cnic);
+                formData.append('mother_phone', mother.phone);
+                formData.append('mother_email', mother.email);
+                formData.append('mother_cnic_front', mother.frontFile);
+                formData.append('mother_cnic_back', mother.backFile);
+                if (!fatherHasData) {
+                    formData.append('parent_name', mother.name);
+                    formData.append('cnic', mother.cnic);
+                    formData.append('phone_no', mother.phone);
+                    formData.append('email', mother.email);
+                    formData.append('cnic_front', mother.frontFile);
+                    formData.append('cnic_back', mother.backFile);
+                }
+            }
 
             try {
                 const res = await fetch(`${API_BASE_URL}/parent-update-requests`, {
@@ -1174,16 +1421,16 @@
                 alertBox.style.display = 'block';
 
                 document.getElementById('updateRequestForm').reset();
-                const fThumb = document.getElementById('frontThumb');
-                if (fThumb) { fThumb.innerHTML = ''; fThumb.style.display = 'none'; }
-                const bThumb = document.getElementById('backThumb');
-                if (bThumb) { bThumb.innerHTML = ''; bThumb.style.display = 'none'; }
+                ['frontThumbFather', 'backThumbFather', 'frontThumbMother', 'backThumbMother'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.innerHTML = ''; el.style.display = 'none'; }
+                });
                 document.getElementById('studentRepeaterContainer').innerHTML = '';
                 addStudentRepeaterRow();
 
                 setTimeout(() => {
                     closePortalModal('updateRequestModal');
-                    showAlert('Your data update request has been submitted successfully. The respective branch will review your request.', 'success');
+                    showAlert('Your data update request has been submitted successfully. The respective branch will review your request within 24 hours.', 'success');
                 }, 2000);
             } catch (err) {
                 alertBox.className = 'status-alert error';
@@ -1198,29 +1445,31 @@
 
         // Auto-format CNIC in update request modal
         document.addEventListener('DOMContentLoaded', function() {
-            const reqPhoneInput = document.getElementById('reqPhoneNo');
-            if (reqPhoneInput) {
+            document.querySelectorAll('.parent-phone-input').forEach(reqPhoneInput => {
                 reqPhoneInput.addEventListener('input', function(e) {
                     let val = e.target.value;
                     let hasPlus = val.startsWith('+');
                     let digits = val.replace(/\D/g, '').slice(0, 13);
                     e.target.value = (hasPlus ? '+' : '') + digits;
                 });
-            }
-
-            const reqCnicInput = document.getElementById('reqCnic');
-            if (reqCnicInput) {
+            });
+            document.querySelectorAll('.parent-cnic-input').forEach(reqCnicInput => {
                 reqCnicInput.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/\D/g, '').slice(0, 13);
                     e.target.value = value.slice(0,5) + (value.length > 5 ? '-' + value.slice(5,12) : '') + (value.length > 12 ? '-' + value.slice(12) : '');
                 });
-            }
+            });
         });
 
         window.addEventListener('pageshow', function () {
             const savedCnic = sessionStorage.getItem('feeChallanCnic');
             if (savedCnic && !cnicInput.value && !fetchedChildrenList.length) {
-                cnicInput.value = savedCnic;
+                try {
+                    const saved = JSON.parse(savedCnic);
+                    cnicInput.value = typeof saved === 'string' ? saved : (saved.father || saved.mother || '');
+                } catch (e) {
+                    cnicInput.value = savedCnic;
+                }
                 document.getElementById('challanForm').requestSubmit();
             }
         });

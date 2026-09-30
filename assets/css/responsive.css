@@ -720,7 +720,9 @@
     }
     .responsive-menu {
         width: 100%;
-        padding-top: 70px;
+        top: 100px;
+        height: calc(100% - 100px);
+        padding-top: 30px;
     }
     .about-page-content {
         padding: 60px 0 0;
@@ -861,7 +863,6 @@
     justify-content: left;
     align-items: left;
 }
-
 
 
 
