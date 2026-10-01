@@ -2871,18 +2871,24 @@ footer .bottom-footer .social-links {
     position: fixed;
     top: 0;
     left: 0;
-    width: 300px;
+    width: 320px;
+    max-width: 85vw;
     background-color: #fff;
     -ms-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     -o-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    height: 100%;
-    padding: 50px;
-    padding-top: 100px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding: 30px 25px 80px 25px;
+    padding-top: 90px;
     opacity: 0;
     transform: translateX(-100%);
     visibility: hidden;
     transition: all 0.4s ease-in-out;
+    z-index: 999999;
 }
 
 .responsive-menu.active {
@@ -2892,8 +2898,15 @@ footer .bottom-footer .social-links {
     z-index: 999999;
 }
 
+.responsive-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 30px;
+}
+
 .responsive-menu ul li {
-    margin-bottom: 30px;
+    margin-bottom: 18px;
 }
 
 .responsive-menu ul li:last-child {
@@ -2902,9 +2915,10 @@ footer .bottom-footer .social-links {
 
 .responsive-menu ul li a {
     color: #202735;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     font-family: Poppins, sans-serif;
+    display: inline-block;
 }
 
 /* The desktop admission styling uses a white pill, which is not readable

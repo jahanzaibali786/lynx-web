@@ -720,9 +720,15 @@
     }
     .responsive-menu {
         width: 100%;
-        top: 100px;
-        height: calc(100% - 100px);
-        padding-top: 30px;
+        max-width: 100%;
+        top: 80px;
+        height: calc(100vh - 80px);
+        max-height: calc(100vh - 80px);
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        padding-top: 20px;
+        padding-bottom: 70px;
     }
     .about-page-content {
         padding: 60px 0 0;

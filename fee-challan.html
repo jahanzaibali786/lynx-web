@@ -757,7 +757,7 @@
                             <div class="parent-info-grid">
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqFatherName">Father Name</label>
-                                    <input type="text" id="reqFatherName" class="input-control" placeholder="e.g. Muhammad Ali">
+                                    <input type="text" id="reqFatherName" class="input-control" placeholder="e.g. John xxxxxx">
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqFatherCnic">Father CNIC</label>
@@ -765,11 +765,11 @@
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqFatherPhone">Father Phone No</label>
-                                    <input type="tel" id="reqFatherPhone" class="input-control parent-phone-input" placeholder="03001234567" maxlength="14">
+                                    <input type="tel" id="reqFatherPhone" class="input-control parent-phone-input" placeholder="0322xxxxxxx" maxlength="14">
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqFatherEmail">Father Email Address</label>
-                                    <input type="email" id="reqFatherEmail" class="input-control" placeholder="father@example.com">
+                                    <input type="email" id="reqFatherEmail" class="input-control" placeholder="father.xxxxxx@domain.com">
                                 </div>
                             </div>
                             <!-- Father CNIC Uploads -->
@@ -797,7 +797,7 @@
                             <div class="parent-info-grid">
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqMotherName">Mother Name</label>
-                                    <input type="text" id="reqMotherName" class="input-control" placeholder="e.g. Misbah Sajid">
+                                    <input type="text" id="reqMotherName" class="input-control" placeholder="e.g. Mother xxxxxx">
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqMotherCnic">Mother CNIC</label>
@@ -805,11 +805,11 @@
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqMotherPhone">Mother Phone No</label>
-                                    <input type="tel" id="reqMotherPhone" class="input-control parent-phone-input" placeholder="03001234567" maxlength="14">
+                                    <input type="tel" id="reqMotherPhone" class="input-control parent-phone-input" placeholder="0322xxxxxxx" maxlength="14">
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="reqMotherEmail">Mother Email Address</label>
-                                    <input type="email" id="reqMotherEmail" class="input-control" placeholder="mother@example.com">
+                                    <input type="email" id="reqMotherEmail" class="input-control" placeholder="mother.xxxxxx@domain.com">
                                 </div>
                             </div>
                             <!-- Mother CNIC Uploads -->
@@ -835,7 +835,7 @@
                         <!-- Combined Residential Address (One for both) -->
                         <div class="form-group" style="margin:14px 0 0;">
                             <label for="reqAddress">Residential Address <span style="color:#dc2626;">*</span></label>
-                            <textarea id="reqAddress" class="input-control" rows="2" placeholder="House # 123, Street 4, Sector..." required></textarea>
+                            <textarea id="reqAddress" class="input-control" rows="2" placeholder="House / Street / Area xxxxxx" required></textarea>
                         </div>
                     </div>
 
@@ -1146,11 +1146,11 @@
                 </div>
                 <div class="form-group" style="margin-bottom:0;">
                     <label style="font-size:12px;font-weight:700;">Student Roll No.</label>
-                    <input type="text" class="input-control student-roll" placeholder="e.g. 10243" value="${escapeHtml(data.roll_no || '')}">
+                    <input type="text" class="input-control student-roll" placeholder="e.g. 53xxxx" value="${escapeHtml(data.roll_no || '')}">
                 </div>
                 <div class="form-group" style="margin-bottom:0;">
                     <label style="font-size:12px;font-weight:700;">Student Name <span style="color:#dc2626;">*</span></label>
-                    <input type="text" class="input-control student-name" placeholder="Full Student Name" value="${escapeHtml(data.student_name || '')}" required>
+                    <input type="text" class="input-control student-name" placeholder="Student Name xxxxxx" value="${escapeHtml(data.student_name || '')}" required>
                 </div>
                 <div>
                     <button type="button" class="child-action-btn remove-row-btn" onclick="removeStudentRepeaterRow(this)" style="background:#fee2e2;border-color:#fca5a5;color:#dc2626;padding:9px 12px;margin:0;" title="Remove this child">
@@ -1202,10 +1202,39 @@
             }
         }
 
+        function showUpdateRequestModalAlert(msg, type = 'error', focusFieldId = null) {
+            const alertBox = document.getElementById('updateRequestAlert');
+            if (alertBox) {
+                alertBox.className = 'status-alert ' + type;
+                const icon = (type === 'success') 
+                    ? '<i class="fa-solid fa-circle-check" style="margin-right:6px;"></i> ' 
+                    : ((type === 'warning') ? '<i class="fa-solid fa-circle-info" style="margin-right:6px;"></i> ' : '<i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i> ');
+                alertBox.innerHTML = icon + escapeHtml(msg);
+                alertBox.style.display = 'block';
+            }
+
+            // Scroll modal body smoothly to top so parent never misses the alert
+            const modalBody = document.querySelector('#updateRequestModal .portal-modal-body');
+            if (modalBody) {
+                modalBody.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (alertBox) {
+                alertBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Modal errors are strictly displayed in the modal alert to prevent polluting outer CNIC search
+
+            if (focusFieldId) {
+                setTimeout(() => {
+                    const el = document.getElementById(focusFieldId);
+                    if (el) { el.focus(); }
+                }, 250);
+            }
+        }
+
         async function submitParentUpdateRequest(event) {
             event.preventDefault();
             const alertBox = document.getElementById('updateRequestAlert');
-            alertBox.style.display = 'none';
+            if (alertBox) { alertBox.style.display = 'none'; }
 
             const father = {
                 name: (document.getElementById('reqFatherName')?.value || '').trim(),
@@ -1268,9 +1297,7 @@
             }
 
             if (!fatherHasData && !motherHasData) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = 'Please fill in Father details, Mother details, or both along with CNIC pictures.';
-                alertBox.style.display = 'block';
+                showUpdateRequestModalAlert('Please fill in Father details, Mother details, or both along with CNIC pictures.', 'error');
                 return;
             }
 
@@ -1278,42 +1305,42 @@
 
             if (fatherHasData) {
                 if (!father.name) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Father Name.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                    switchParentTab('father'); showUpdateRequestModalAlert('Please enter Father Name.', 'error', 'reqFatherName'); return;
                 }
                 if (father.cnic.replace(/\D/g, '').length !== 13) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter a valid 13-digit Father CNIC number.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                    switchParentTab('father'); showUpdateRequestModalAlert('Please enter a valid 13-digit Father CNIC number.', 'error', 'reqFatherCnic'); return;
                 }
                 if (!father.phone) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Father Phone Number.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                    switchParentTab('father'); showUpdateRequestModalAlert('Please enter Father Phone Number.', 'error', 'reqFatherPhone'); return;
                 }
                 if (!father.frontFile || !father.backFile) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Both Father CNIC Front and CNIC Back pictures are required.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                    switchParentTab('father'); showUpdateRequestModalAlert('Both Father CNIC Front and CNIC Back pictures are required.', 'error', !father.frontFile ? 'reqFatherCnicFront' : 'reqFatherCnicBack'); return;
                 }
                 if (father.frontFile.size > MAX_IMAGE_SIZE || father.backFile.size > MAX_IMAGE_SIZE) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Father CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.'; alertBox.style.display = 'block'; switchParentTab('father'); return;
+                    switchParentTab('father'); showUpdateRequestModalAlert('Father CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.', 'error'); return;
                 }
             }
 
             if (motherHasData) {
                 if (!mother.name) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Mother Name.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                    switchParentTab('mother'); showUpdateRequestModalAlert('Please enter Mother Name.', 'error', 'reqMotherName'); return;
                 }
                 if (mother.cnic.replace(/\D/g, '').length !== 13) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter a valid 13-digit Mother CNIC number.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                    switchParentTab('mother'); showUpdateRequestModalAlert('Please enter a valid 13-digit Mother CNIC number.', 'error', 'reqMotherCnic'); return;
                 }
                 if (!mother.phone) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter Mother Phone Number.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                    switchParentTab('mother'); showUpdateRequestModalAlert('Please enter Mother Phone Number.', 'error', 'reqMotherPhone'); return;
                 }
                 if (!mother.frontFile || !mother.backFile) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Both Mother CNIC Front and CNIC Back pictures are required.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                    switchParentTab('mother'); showUpdateRequestModalAlert('Both Mother CNIC Front and CNIC Back pictures are required.', 'error', !mother.frontFile ? 'reqMotherCnicFront' : 'reqMotherCnicBack'); return;
                 }
                 if (mother.frontFile.size > MAX_IMAGE_SIZE || mother.backFile.size > MAX_IMAGE_SIZE) {
-                    alertBox.className = 'status-alert error'; alertBox.textContent = 'Mother CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.'; alertBox.style.display = 'block'; switchParentTab('mother'); return;
+                    switchParentTab('mother'); showUpdateRequestModalAlert('Mother CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.', 'error'); return;
                 }
             }
 
             if (!address) {
-                alertBox.className = 'status-alert error'; alertBox.textContent = 'Please enter the residential address.'; alertBox.style.display = 'block'; return;
+                showUpdateRequestModalAlert('Please enter the residential address.', 'error', 'reqAddress'); return;
             }
 
             const rows = document.querySelectorAll('#studentRepeaterContainer .student-repeater-row');
@@ -1324,15 +1351,11 @@
                 const studentName = rows[i].querySelector('.student-name').value.trim();
 
                 if (!branchId) {
-                    alertBox.className = 'status-alert error';
-                    alertBox.textContent = `Please select an active branch for student #${i + 1}.`;
-                    alertBox.style.display = 'block';
+                    showUpdateRequestModalAlert(`Please select an active branch for student #${i + 1}.`, 'error');
                     return;
                 }
                 if (!studentName) {
-                    alertBox.className = 'status-alert error';
-                    alertBox.textContent = `Please enter student name for student #${i + 1}.`;
-                    alertBox.style.display = 'block';
+                    showUpdateRequestModalAlert(`Please enter student name for student #${i + 1}.`, 'error');
                     return;
                 }
 
@@ -1344,9 +1367,7 @@
             }
 
             if (students.length === 0) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = 'Please add at least one student record.';
-                alertBox.style.display = 'block';
+                showUpdateRequestModalAlert('Please add at least one student record.', 'error');
                 return;
             }
 
@@ -1416,9 +1437,7 @@
                     throw new Error(payload.message || Object.values(payload.errors || {}).flat().join(' '));
                 }
 
-                alertBox.className = 'status-alert success';
-                alertBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${escapeHtml(payload.message || 'Update request submitted successfully!')}`;
-                alertBox.style.display = 'block';
+                showUpdateRequestModalAlert(payload.message || 'Update request submitted successfully!', 'success');
 
                 document.getElementById('updateRequestForm').reset();
                 ['frontThumbFather', 'backThumbFather', 'frontThumbMother', 'backThumbMother'].forEach(id => {
@@ -1433,9 +1452,7 @@
                     showAlert('Your data update request has been submitted successfully. The respective branch will review your request within 24 hours.', 'success');
                 }, 2000);
             } catch (err) {
-                alertBox.className = 'status-alert error';
-                alertBox.textContent = err.message || 'Submission failed. Please check your connection and try again.';
-                alertBox.style.display = 'block';
+                showUpdateRequestModalAlert(err.message || 'Submission failed. Please check your connection and try again.', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitText.textContent = 'Submit Request';

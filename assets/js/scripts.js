@@ -107,12 +107,20 @@
         mobileMenu.append('<li><a href="index.html" title="">Home</a></li>');
       }
       mobileMenu.append(desktopItems);
+
+      if (mobileMenu.find('a[href*="fee-challan"]').length === 0) {
+        mobileMenu.append('<li><a href="fee-challan.html" title="" class="admissions">Fee Challan</a></li>');
+      }
     }
 
-    $(".menu-btn").on("click", function () {
+    $(".menu-btn").on("click", function (e) {
+      e.preventDefault();
       $(this).toggleClass("active");
       $(".responsive-menu").toggleClass("active");
       $("body").toggleClass("scroll-hide");
+      if ($(".responsive-menu").hasClass("active")) {
+        $(".responsive-menu").scrollTop(0);
+      }
     });
 
     $(".responsive-menu ul ul").parent().addClass("menu-item-has-children");
