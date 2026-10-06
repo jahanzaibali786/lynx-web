@@ -779,12 +779,12 @@
                                 </h5>
                                 <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;">
                                     <div class="form-group" style="margin-bottom:0;">
-                                        <label for="reqFatherCnicFront" style="font-size:12px;font-weight:700;">Father CNIC Front <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <label for="reqFatherCnicFront" style="font-size:12px;font-weight:700;">Father CNIC Front <small style="color:#64748b;font-weight:normal;">(Max 5 MB)</small></label>
                                         <input type="file" id="reqFatherCnicFront" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'frontThumbFather')">
                                         <div id="frontThumbFather" style="margin-top:6px;display:none;"></div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:0;">
-                                        <label for="reqFatherCnicBack" style="font-size:12px;font-weight:700;">Father CNIC Back <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <label for="reqFatherCnicBack" style="font-size:12px;font-weight:700;">Father CNIC Back <small style="color:#64748b;font-weight:normal;">(Max 5 MB)</small></label>
                                         <input type="file" id="reqFatherCnicBack" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'backThumbFather')">
                                         <div id="backThumbFather" style="margin-top:6px;display:none;"></div>
                                     </div>
@@ -819,12 +819,12 @@
                                 </h5>
                                 <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;">
                                     <div class="form-group" style="margin-bottom:0;">
-                                        <label for="reqMotherCnicFront" style="font-size:12px;font-weight:700;">Mother CNIC Front <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <label for="reqMotherCnicFront" style="font-size:12px;font-weight:700;">Mother CNIC Front <small style="color:#64748b;font-weight:normal;">(Max 5 MB)</small></label>
                                         <input type="file" id="reqMotherCnicFront" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'frontThumbMother')">
                                         <div id="frontThumbMother" style="margin-top:6px;display:none;"></div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:0;">
-                                        <label for="reqMotherCnicBack" style="font-size:12px;font-weight:700;">Mother CNIC Back <small style="color:#64748b;font-weight:normal;">(Max 1MB)</small></label>
+                                        <label for="reqMotherCnicBack" style="font-size:12px;font-weight:700;">Mother CNIC Back <small style="color:#64748b;font-weight:normal;">(Max 5 MB)</small></label>
                                         <input type="file" id="reqMotherCnicBack" class="input-control file-control" accept="image/*,.pdf" onchange="previewFileThumb(this, 'backThumbMother')">
                                         <div id="backThumbMother" style="margin-top:6px;display:none;"></div>
                                     </div>
@@ -1301,7 +1301,7 @@
                 return;
             }
 
-            const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1 MB
+            const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
 
             if (fatherHasData) {
                 if (!father.name) {
@@ -1317,7 +1317,7 @@
                     switchParentTab('father'); showUpdateRequestModalAlert('Both Father CNIC Front and CNIC Back pictures are required.', 'error', !father.frontFile ? 'reqFatherCnicFront' : 'reqFatherCnicBack'); return;
                 }
                 if (father.frontFile.size > MAX_IMAGE_SIZE || father.backFile.size > MAX_IMAGE_SIZE) {
-                    switchParentTab('father'); showUpdateRequestModalAlert('Father CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.', 'error'); return;
+                    switchParentTab('father'); showUpdateRequestModalAlert('Father CNIC picture exceeds 5 MB limit. Please upload images under 5 MB.', 'error'); return;
                 }
             }
 
@@ -1335,7 +1335,7 @@
                     switchParentTab('mother'); showUpdateRequestModalAlert('Both Mother CNIC Front and CNIC Back pictures are required.', 'error', !mother.frontFile ? 'reqMotherCnicFront' : 'reqMotherCnicBack'); return;
                 }
                 if (mother.frontFile.size > MAX_IMAGE_SIZE || mother.backFile.size > MAX_IMAGE_SIZE) {
-                    switchParentTab('mother'); showUpdateRequestModalAlert('Mother CNIC picture exceeds 1 MB limit. Please upload images under 1 MB.', 'error'); return;
+                    switchParentTab('mother'); showUpdateRequestModalAlert('Mother CNIC picture exceeds 5 MB limit. Please upload images under 5 MB.', 'error'); return;
                 }
             }
 

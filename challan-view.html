@@ -323,7 +323,9 @@ function render(d) {
                     <tbody>
                         ${arrears.map(a => `
                             <tr>
-                                <td><a class="arrear-link" href="challan-view.html?key=${encodeURIComponent(a.view_token)}">#${esc(a.challan_no)}</a></td>
+                                <td>${a.view_token
+                                    ? `<a class="arrear-link" href="challan-view.html?key=${encodeURIComponent(a.view_token)}">#${esc(a.challan_no)}</a>`
+                                    : `<span>#${esc(a.challan_no)}${a.challan_type && a.challan_type !== 'Regular' ? ` (${esc(a.challan_type)})` : ''}</span>`}</td>
                                 <td>${esc(a.fee_month)}</td>
                                 <td class="amount">PKR ${money(a.unpaid_balance)}</td>
                             </tr>
