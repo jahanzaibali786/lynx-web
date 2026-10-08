@@ -657,6 +657,12 @@
         .receipt-line { display:grid; grid-template-columns:1fr auto auto; gap:15px; padding:10px 14px; border-top:1px solid #e2e8f0; font-size:13px; }
         .empty-receipt { padding:10px 14px; color:#94a3b8; font-size:13px; }
         .file-control { height:auto; padding:9px; }
+        .deposit-upload-status { display:block; min-height:18px; margin-top:7px; color:#64748b; font-size:12px; font-weight:600; }
+        .deposit-upload-status.is-uploading { color:#1d4ed8; }
+        .deposit-upload-status.is-success { color:#15803d; }
+        .deposit-upload-status.is-error { color:#b91c1c; }
+        .deposit-upload-progress { height:7px; margin-top:8px; overflow:hidden; border-radius:99px; background:#e2e8f0; }
+        .deposit-upload-progress-bar { width:0; height:100%; border-radius:inherit; background:#2563eb; transition:width .18s ease; }
         @media(max-width:700px){
         .student-repeater-row{grid-template-columns:1fr !important;} .challan-card{padding:24px 18px}.cnic-action-row{grid-template-columns:1fr auto auto}.child-actions{grid-template-columns:1fr}.receipt-line{grid-template-columns:1fr}.statement-head{display:block}.portal-modal{padding:8px} }
     
@@ -878,7 +884,7 @@
                     <form class="portal-modal-body" id="depositSlipForm" onsubmit="submitDepositSlip(event)">
                         <input type="hidden" id="depositStudentId"><input type="hidden" id="depositChallanId">
                         <div class="form-group"><label>Challan No</label><input class="input-control" id="depositChallanNo" disabled></div>
-                        <div class="form-group"><label>Deposit Slip (JPG, PNG or PDF; max 5 MB)</label><input class="input-control file-control" type="file" id="depositSlipFile" accept=".jpg,.jpeg,.png,.pdf" required></div>
+                        <div class="form-group"><label>Deposit Slip (JPG, PNG or PDF; max 5 MB)</label><input class="input-control file-control" type="file" id="depositSlipFile" accept=".jpg,.jpeg,.png,.pdf" required><small id="depositUploadStatus" class="deposit-upload-status" aria-live="polite">Choose a file, then submit once.</small><div id="depositUploadProgress" class="deposit-upload-progress" hidden><div class="deposit-upload-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div></div>
                         <button type="submit" class="btn-search" id="depositSubmitBtn"><span>Upload Slip</span><i class="fa-solid fa-upload"></i></button>
                     </form>
                 </div>
@@ -979,16 +985,23 @@
             } catch(error){ box.innerHTML = `<div class="status-alert error" style="display:block">${escapeHtml(error.message)}</div>`; }
         }
         async function openDepositSlip(id) {
-            try { const data=await currentChallan(id); document.getElementById('depositStudentId').value=id; document.getElementById('depositChallanId').value=data.challan.id; document.getElementById('depositChallanNo').value=data.challan.challan_no; document.getElementById('depositSlipFile').value=''; openPortalModal('depositModal'); }
+            try { const data=await currentChallan(id); document.getElementById('depositStudentId').value=id; document.getElementById('depositChallanId').value=data.challan.id; document.getElementById('depositChallanNo').value=data.challan.challan_no; document.getElementById('depositSlipFile').value=''; document.getElementById('depositSlipFile').disabled=false; setDepositUploadState('Choose a file, then submit once.', 'idle', 0); document.getElementById('depositSubmitBtn').disabled=false; document.getElementById('depositSubmitBtn').innerHTML='<span>Upload Slip</span><i class="fa-solid fa-upload"></i>'; openPortalModal('depositModal'); }
             catch(error){ showAlert(error.message, 'error'); }
         }
         async function submitDepositSlip(event) {
             event.preventDefault(); const id=document.getElementById('depositStudentId').value; const child=childById(id); const file=document.getElementById('depositSlipFile').files[0];
-            if(!file) return; const button=document.getElementById('depositSubmitBtn'); button.disabled=true;
+            if(!file) { setDepositUploadState('Please choose a deposit-slip file first.', 'error'); return; }
+            const button=document.getElementById('depositSubmitBtn'); if(button.disabled) return;
+            button.disabled=true; button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i><span>Uploading…</span>'; setDepositUploadState('Uploading your receipt… 0%', 'uploading', 0);
             const data=new FormData(); data.append('challan_id',document.getElementById('depositChallanId').value); data.append('slip',file);
-            try { const response=await fetch(`${API_BASE_URL}/students/${id}/deposit-slips`,{method:'POST',body:data,headers:{Accept:'application/json',Authorization:'Bearer ' + (child.access_token || '')}}); const payload=await response.json(); if(!response.ok) throw new Error(payload.message || Object.values(payload.errors || {}).flat().join(' ')); closePortalModal('depositModal'); showAlert(payload.message,'success'); }
-            catch(error){ showAlert(error.message || 'Upload failed.','error'); } finally { button.disabled=false; }
+            const xhr=new XMLHttpRequest(); xhr.open('POST',`${API_BASE_URL}/students/${id}/deposit-slips`); xhr.setRequestHeader('Accept','application/json'); xhr.setRequestHeader('Authorization','Bearer ' + (child.access_token || ''));
+            xhr.upload.onprogress=function(e){ if(!e.lengthComputable) return; const uploadPercent=Math.round((e.loaded/e.total)*100); const displayPercent=Math.min(95, Math.round(uploadPercent*.95)); setDepositUploadState('Uploading your receipt… '+displayPercent+'%', 'uploading', displayPercent); };
+            xhr.upload.onload=function(){ setDepositUploadState('Receipt received. Saving and verifying it…', 'uploading', 96); };
+            xhr.onload=function(){ let payload={}; try { payload=JSON.parse(xhr.responseText || '{}'); } catch(e) {} if(xhr.status >= 200 && xhr.status < 300){ setDepositUploadState('Receipt uploaded successfully. The branch will review it.', 'success', 100); button.innerHTML='<i class="fa-solid fa-check"></i><span>Uploaded</span>'; document.getElementById('depositSlipFile').disabled=true; showAlert(payload.message || 'Deposit slip uploaded successfully.','success'); return; } const message=payload.message || Object.values(payload.errors || {}).flat().join(' ') || 'Upload failed. Please try again.'; setDepositUploadState(message, 'error'); button.disabled=false; button.innerHTML='<span>Upload Slip</span><i class="fa-solid fa-upload"></i>'; };
+            xhr.onerror=function(){ setDepositUploadState('Upload failed due to a network error. Please try again.', 'error'); button.disabled=false; button.innerHTML='<span>Upload Slip</span><i class="fa-solid fa-upload"></i>'; };
+            xhr.send(data);
         }
+        function setDepositUploadState(message, state, percent) { const status=document.getElementById('depositUploadStatus'), progress=document.getElementById('depositUploadProgress'), bar=progress.querySelector('.deposit-upload-progress-bar'); status.textContent=message; status.className='deposit-upload-status'+(state && state!=='idle' ? ' is-'+state : ''); if(typeof percent==='number'){ progress.hidden=false; bar.style.width=percent+'%'; bar.setAttribute('aria-valuenow', percent); } else { progress.hidden=true; } }
         function openPortalModal(id){ const modal=document.getElementById(id); modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
         function closePortalModal(id){ const modal=document.getElementById(id); modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
         function resetForm(){ sessionStorage.removeItem('feeChallanCnic'); fetchedChildrenList=[]; challanCache={}; cnicInput.readOnly=false; cnicInput.style.backgroundColor='#fff'; cnicInput.value=''; document.getElementById('parentInfoBadge').style.display='none'; document.getElementById('childrenListGroup').style.display='none'; document.getElementById('childCardsList').innerHTML=''; document.getElementById('resetBtn').style.display='none'; document.getElementById('searchBtn').style.display='inline-flex'; hideAlert(); cnicInput.focus(); }
