@@ -643,6 +643,7 @@
         .child-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:14px; }
         .child-action-btn { border:1px solid #2563eb; background:#fff; color:#1d4ed8; padding:8px 10px; border-radius:5px; font:700 11px inherit; cursor:pointer; white-space:nowrap; }
         .child-action-btn:hover { background:#eff6ff; }
+        .child-action-btn:disabled { opacity:.58; cursor:not-allowed; background:#f1f5f9; color:#64748b; border-color:#cbd5e1; }
         .child-action-btn.deposit { border-color:#16a34a; color:#15803d; }
         .portal-modal { display:none; position:fixed; inset:0; z-index:10000; padding:20px; background:rgba(15,23,42,.58); align-items:center; justify-content:center; }
         .portal-modal.open { display:flex; }
@@ -886,6 +887,7 @@
                     <form class="portal-modal-body" id="depositSlipForm" onsubmit="submitDepositSlip(event)">
                         <input type="hidden" id="depositStudentId"><input type="hidden" id="depositChallanId">
                         <div class="form-group"><label>Challan No</label><input class="input-control" id="depositChallanNo" disabled></div>
+                        <div class="form-group"><label>Deposit Amount</label><input class="input-control" type="number" id="depositAmount" min="0" step="0.01" inputmode="decimal" placeholder="Enter deposited amount" required></div>
                         <div class="form-group"><label>Deposit Slip (JPG, PNG or PDF; max 5 MB)</label><input class="input-control file-control" type="file" id="depositSlipFile" accept=".jpg,.jpeg,.png,.pdf" required><small id="depositUploadStatus" class="deposit-upload-status" aria-live="polite">Choose a file, then submit once.</small><div id="depositUploadProgress" class="deposit-upload-progress" hidden><div class="deposit-upload-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div></div>
                         <button type="submit" class="btn-search" id="depositSubmitBtn"><span>Upload Slip</span><i class="fa-solid fa-upload"></i></button>
                     </form>
@@ -933,8 +935,9 @@
                 const payload = await response.json();
                 if (response.status === 404) { showContactAlert(); return; }
                 if (!response.ok) throw new Error(payload.message || 'Unable to search students.');
-                fetchedChildrenList = (payload.data || []).filter(student => student.active_status == 1 || String(student.student_status).toLowerCase() === 'active');
+                fetchedChildrenList = (payload.data || []).filter(student => student.portal_restricted || student.is_shifa_student || student.active_status == 1 || String(student.student_status).toLowerCase() === 'active');
                 if (!fetchedChildrenList.length) { showContactAlert(); return; }
+                const allRestricted = fetchedChildrenList.every(student => student.portal_restricted || student.is_shifa_student);
                 const first = fetchedChildrenList[0];
                 const searchedDigits = cnic.replace(/\D/g, '');
                 const isMother = (first.mother_cnic && first.mother_cnic.replace(/\D/g, '') === searchedDigits) ||
@@ -944,7 +947,7 @@
                 const parents = [first.father_name, first.mother_name].map(v => String(v || '').trim()).filter((v,i,a) => v && a.indexOf(v) === i);
                 const parentName = (parents.join(' / ') || 'Verified Parent').toUpperCase();
                 document.getElementById('displayParentName').textContent = parentName;
-                document.getElementById('parentInfoBadge').style.display = 'block';
+                document.getElementById('parentInfoBadge').style.display = allRestricted ? 'none' : 'block';
                 populateChildrenCards(fetchedChildrenList);
                 document.getElementById('childrenListGroup').style.display = 'block';
                 document.getElementById('resetBtn').style.display = 'inline-flex';
@@ -960,7 +963,11 @@
             children.forEach(child => {
                 const id = child.id || child.student_id || child.child_id;
                 const card = document.createElement('div'); card.className = 'child-card-item';
-                card.innerHTML = `<div class="child-info-left"><div class="child-card-name"><i class="fa-solid fa-graduation-cap" style="color:#3b82f6"></i><span>${escapeHtml(child.student_name || child.name || 'Student')}</span><span class="child-badge">${escapeHtml(child.class_name || 'Class')}${child.section_name ? ' (Sec '+escapeHtml(child.section_name)+')':''}</span></div><div class="child-card-meta">${child.roll_no ? '<span><strong>Roll: '+escapeHtml(child.roll_no)+'</strong></span>':''}${child.branch_name ? '<span> | <i class="fa-solid fa-school"></i> '+escapeHtml(child.branch_name)+'</span>':''}</div></div><div class="child-actions"><button type="button" class="child-action-btn" onclick="viewChallan(${Number(id)})"><i class="fa-solid fa-file-invoice"></i> View Challan</button><button type="button" class="child-action-btn" onclick="viewStatement(${Number(id)})"><i class="fa-solid fa-list"></i> View Statement</button><button type="button" class="child-action-btn deposit" onclick="openDepositSlip(${Number(id)})"><i class="fa-solid fa-paperclip"></i> Attach Deposit Slip</button></div>`;
+                if (child.portal_restricted || child.is_shifa_student) {
+                    card.innerHTML = `<div class="child-info-left"><div class="child-card-name"><i class="fa-solid fa-graduation-cap" style="color:#3b82f6"></i><span>${escapeHtml(child.student_name || child.name || 'Student')}</span><span class="child-badge">${escapeHtml(child.class_name || 'Class')}${child.section_name ? ' (Sec '+escapeHtml(child.section_name)+')':''}</span></div><div class="child-card-meta">${child.roll_no ? '<span><strong>Roll: '+escapeHtml(child.roll_no)+'</strong></span>':''}${child.branch_name ? '<span> | <i class="fa-solid fa-school"></i> '+escapeHtml(child.branch_name)+'</span>':''}</div><div style="font-weight:800;color:#92400e;margin-top:8px;"><i class="fa-solid fa-circle-info"></i> ${escapeHtml(child.restriction_message || 'Dear Parents, access has been denied,please contact shifa HR for further assistance.')}</div></div><div class="child-actions"><button type="button" class="child-action-btn" disabled aria-disabled="true"><i class="fa-solid fa-file-invoice"></i> View Challan</button><button type="button" class="child-action-btn" disabled aria-disabled="true"><i class="fa-solid fa-list"></i> View Statement</button><button type="button" class="child-action-btn deposit" disabled aria-disabled="true"><i class="fa-solid fa-paperclip"></i> Attach Deposit Slip</button></div>`;
+                } else {
+                    card.innerHTML = `<div class="child-info-left"><div class="child-card-name"><i class="fa-solid fa-graduation-cap" style="color:#3b82f6"></i><span>${escapeHtml(child.student_name || child.name || 'Student')}</span><span class="child-badge">${escapeHtml(child.class_name || 'Class')}${child.section_name ? ' (Sec '+escapeHtml(child.section_name)+')':''}</span></div><div class="child-card-meta">${child.roll_no ? '<span><strong>Roll: '+escapeHtml(child.roll_no)+'</strong></span>':''}${child.branch_name ? '<span> | <i class="fa-solid fa-school"></i> '+escapeHtml(child.branch_name)+'</span>':''}</div></div><div class="child-actions"><button type="button" class="child-action-btn" onclick="viewChallan(${Number(id)})"><i class="fa-solid fa-file-invoice"></i> View Challan</button><button type="button" class="child-action-btn" onclick="viewStatement(${Number(id)})"><i class="fa-solid fa-list"></i> View Statement</button><button type="button" class="child-action-btn deposit" onclick="openDepositSlip(${Number(id)})"><i class="fa-solid fa-paperclip"></i> Attach Deposit Slip</button></div>`;
+                }
                 list.appendChild(card);
             });
         }
@@ -974,11 +981,12 @@
             return (challanCache[id] = payload.data);
         }
         async function viewChallan(id) {
+            const child = childById(id); if (child && (child.portal_restricted || child.is_shifa_student)) { showAlert(child.restriction_message || 'Dear Parents, access has been denied,please contact shifa HR for further assistance.', 'error'); return; }
             try { const data = await currentChallan(id); sessionStorage.setItem('feeChallanCnic', cnicInput.value); window.location.href = `challan-view.html?key=${encodeURIComponent(data.challan.view_token)}`; }
             catch(error){ showAlert(error.message, 'error'); }
         }
         async function viewStatement(id) {
-            const child = childById(id); openPortalModal('statementModal');
+            const child = childById(id); if (child && (child.portal_restricted || child.is_shifa_student)) { showAlert(child.restriction_message || 'Dear Parents, access has been denied,please contact shifa HR for further assistance.', 'error'); return; } openPortalModal('statementModal');
             const box = document.getElementById('statementContent'); box.innerHTML = '<div class="empty-receipt">Loading statement...</div>';
             try {
                 const response = await fetch(`${API_BASE_URL}/students/${id}/fee-statement`, {headers:{Accept:'application/json', Authorization:`Bearer ${child.access_token || ''}`}});
@@ -987,15 +995,17 @@
             } catch(error){ box.innerHTML = `<div class="status-alert error" style="display:block">${escapeHtml(error.message)}</div>`; }
         }
         async function openDepositSlip(id) {
-            try { const data=await currentChallan(id); document.getElementById('depositStudentId').value=id; document.getElementById('depositChallanId').value=data.challan.id; document.getElementById('depositChallanNo').value=data.challan.challan_no; document.getElementById('depositSlipFile').value=''; document.getElementById('depositSlipFile').disabled=false; setDepositUploadState('Choose a file, then submit once.', 'idle', 0); document.getElementById('depositSubmitBtn').disabled=false; document.getElementById('depositSubmitBtn').innerHTML='<span>Upload Slip</span><i class="fa-solid fa-upload"></i>'; openPortalModal('depositModal'); }
+            const child = childById(id); if (child && (child.portal_restricted || child.is_shifa_student)) { showAlert(child.restriction_message || 'Dear Parents, access has been denied,please contact shifa HR for further assistance.', 'error'); return; }
+            try { const data=await currentChallan(id); document.getElementById('depositStudentId').value=id; document.getElementById('depositChallanId').value=data.challan.id; document.getElementById('depositChallanNo').value=data.challan.challan_no; document.getElementById('depositAmount').value=''; document.getElementById('depositSlipFile').value=''; document.getElementById('depositSlipFile').disabled=false; setDepositUploadState('Choose a file, then submit once.', 'idle', 0); document.getElementById('depositSubmitBtn').disabled=false; document.getElementById('depositSubmitBtn').innerHTML='<span>Upload Slip</span><i class="fa-solid fa-upload"></i>'; openPortalModal('depositModal'); }
             catch(error){ showAlert(error.message, 'error'); }
         }
         async function submitDepositSlip(event) {
             event.preventDefault(); const id=document.getElementById('depositStudentId').value; const child=childById(id); const file=document.getElementById('depositSlipFile').files[0];
             if(!file) { setDepositUploadState('Please choose a deposit-slip file first.', 'error'); return; }
+            const amountInput=document.getElementById('depositAmount'); const amount=amountInput.value.trim(); if(amount === '' || Number.isNaN(Number(amount)) || Number(amount) < 0) { setDepositUploadState('Please enter a valid non-negative deposit amount.', 'error'); return; }
             const button=document.getElementById('depositSubmitBtn'); if(button.disabled) return;
             button.disabled=true; button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i><span>Uploading…</span>'; setDepositUploadState('Uploading your receipt… 0%', 'uploading', 0);
-            const data=new FormData(); data.append('challan_id',document.getElementById('depositChallanId').value); data.append('slip',file);
+            const data=new FormData(); data.append('challan_id',document.getElementById('depositChallanId').value); data.append('amount',amount); data.append('slip',file);
             const xhr=new XMLHttpRequest(); xhr.open('POST',`${API_BASE_URL}/students/${id}/deposit-slips`); xhr.setRequestHeader('Accept','application/json'); xhr.setRequestHeader('Authorization','Bearer ' + (child.access_token || ''));
             xhr.upload.onprogress=function(e){ if(!e.lengthComputable) return; const uploadPercent=Math.round((e.loaded/e.total)*100); const displayPercent=Math.min(95, Math.round(uploadPercent*.95)); setDepositUploadState('Uploading your receipt… '+displayPercent+'%', 'uploading', displayPercent); };
             xhr.upload.onload=function(){ setDepositUploadState('Receipt received. Saving and verifying it…', 'uploading', 96); };
